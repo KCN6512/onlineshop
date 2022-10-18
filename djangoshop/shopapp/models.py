@@ -6,10 +6,11 @@ from django.urls import reverse
 
 class Products(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название')
-    product_code = models.PositiveIntegerField(validators=[MaxValueValidator(9999999)], verbose_name='Код продукта') # семизначное число
+    product_code = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(9999999)], verbose_name='Код продукта') # семизначное число
     description = models.TextField(verbose_name='Описание товара')
     price = models.DecimalField(max_digits=10000000000, decimal_places=2, verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='categories')
+    image = models.ImageField(null=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -32,3 +33,7 @@ class Categories(models.Model):
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
+
+
+class Order:
+    pass

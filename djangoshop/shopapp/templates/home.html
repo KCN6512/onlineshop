@@ -11,16 +11,45 @@
     <title>{{ page_title }}</title>
   </head>
   <body>
-    <h1>Онлайн магазин</h1>
+        <!-- navbar -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="{% url 'home' %}">Магазин</a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Первая</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Вторая</a>
+                </li>
+              </ul>
+            </div>
+          </nav>
+        <!-- конец navbar -->
+
     <div class="alert alert-danger" role="alert">
         <strong>Ой</strong> Мы пока еще не открылись!
       </div>
     {% block content %}
-    <ul>
+   <!--<ul class="list-group">
     {% for i in products %}
-    <li>{{ i.name }} | {{ i.categories.all|join:"," }} <a href="{{ i.get_absolute_url }}">Страница</a></li>
+    <li class="list-group-item ">{{ i.name }} | {{ i.categories.all|join:"," }} <a class="btn btn-primary" role="button" href="{{ i.get_absolute_url }}">Страница товара</a>
+        <img class="irounded float-top w-25 pb-3" src="{{ i.image.url }} "> 
+    </li>
     {% endfor %}
-    </ul>
+    </ul> -->
+    {% for product in products %}
+    <div class="card w-75 ml-2 mb-2">
+        <img class="card-img-top w-25" src="{{ product.image.url }}" alt="{{ product.name }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <h6 class="card-title">Категории товара : {{ product.categories.all|join:',' }}</h5>
+          <p class="card-text" >{{ product.description|truncatewords:100 }}</p>
+          <h5 class="card-title">Цена : {{ product.price }} рублей </h5>
+          <a href='{{ product.get_absolute_url }}' class="btn btn-primary">Подробнее</a>
+        </div>
+      </div>
+    {% endfor %}
     {% endblock %}
 
 

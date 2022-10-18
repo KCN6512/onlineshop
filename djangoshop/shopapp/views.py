@@ -16,7 +16,8 @@ class HomeView(ListView):
 
 
 def product_view(request, code):
-    return render(request, 'product.html', context={'code': code})
+    queryset = Products.objects.get(product_code=code)
+    return render(request, 'product.html', context={'product': queryset})
 
 if __name__ == '__main__':
     import os
