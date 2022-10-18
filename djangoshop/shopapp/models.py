@@ -1,5 +1,6 @@
 from django.core.validators import MaxValueValidator
 from django.db import models
+from django.urls import reverse
 
 # Create your models here.
 
@@ -12,6 +13,10 @@ class Products(models.Model):
 
     def __str__(self):
         return f'{self.name}'
+
+    def get_absolute_url(self):
+        return reverse("product", kwargs={"code": self.product_code})
+    
 
     class Meta:
         verbose_name = 'Продукт'

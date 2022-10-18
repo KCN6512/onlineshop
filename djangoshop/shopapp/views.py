@@ -15,8 +15,8 @@ class HomeView(ListView):
         return context
 
 
-def product_view(request):
-    return render(request, 'product.html')
+def product_view(request, code):
+    return render(request, 'product.html', context={'code': code})
 
 if __name__ == '__main__':
     import os

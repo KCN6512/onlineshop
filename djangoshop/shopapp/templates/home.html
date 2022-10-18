@@ -18,7 +18,7 @@
     {% block content %}
     <ul>
     {% for i in products %}
-    <li>{{ i.name }} | {{ i.categories.all|join:"," }}</li>
+    <li>{{ i.name }} | {{ i.categories.all|join:"," }} <a href="{{ i.get_absolute_url }}">Страница</a></li>
     {% endfor %}
     </ul>
     {% endblock %}
