@@ -14,7 +14,8 @@
         <img class="card-img-top w-25" src="{{ product.image.url }}" alt="{{ product.name }}">
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
-          <h6 class="card-title">Категории товара : {{ product.categories.all|join:',' }}</h5>
+          <h6 class="card-title">Категории товара : {{ product.categories.all|join:',' }}</h6>
+          <h7 class="card-title">Код товара : {{ product.product_code }}</h7>
           <p class="card-text" >{{ product.description }}</p>
           <h5 class="card-title">Цена : {{ product.price }} рублей </h5>
         </div>
