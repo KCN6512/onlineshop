@@ -1,15 +1,12 @@
-{% extends 'base.html' %}
 <!doctype html>
 <html lang="en">
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
+    <title>{{ title }}</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-    <title></title>
   </head>
   <body>
         <!-- navbar -->
@@ -34,27 +31,8 @@
     <div class="alert alert-danger" role="alert">
         <strong>Ой</strong> Мы пока еще не открылись!
       </div>
+      
     {% block content %}
-   <!--<ul class="list-group">
-    {% for i in products %}
-    <li class="list-group-item ">{{ i.name }} | {{ i.categories.all|join:"," }} <a class="btn btn-primary" role="button" href="{{ i.get_absolute_url }}">Страница товара</a>
-        <img class="irounded float-top w-25 pb-3" src="{{ i.image.url }} "> 
-    </li>
-    {% endfor %}
-    </ul> -->
-    {% for product in products %}
-    <div class="card w-50 ml-2 mb-2">
-        <img class="card-img-top w-25" src="{{ product.image.url }}" alt="{{ product.name }}">
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <h6 class="card-title">Категории товара : {{ product.categories.all|join:',' }}</h5>
-          <p class="card-text" >{{ product.description|truncatewords:100 }}</p>
-          <h5 class="card-title">Цена : {{ product.price|floatformat }} рублей </h5> 
-          <a href='{{ product.get_absolute_url }}' class="btn btn-primary">Подробнее</a>
-          <!-- <a href="{% url 'product' product.product_code %}" class="btn btn-primary">Поasdasdдробнее</a>-->
-        </div>
-      </div>
-    {% endfor %}
     {% endblock %}
 
 

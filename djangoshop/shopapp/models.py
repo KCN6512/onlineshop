@@ -8,7 +8,7 @@ class Products(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название')
     product_code = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(9999999)], verbose_name='Код продукта') # семизначное число
     description = models.TextField(verbose_name='Описание товара')
-    price = models.DecimalField(max_digits=10000000000, decimal_places=2, verbose_name='Цена за единицу')
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='categories')
     image = models.ImageField(null=True)
 
@@ -29,11 +29,14 @@ class Categories(models.Model):
 
     def __str__(self):
         return f'{self.name}'
-    
+
+    def get_absolute_url(self):
+        return reverse("product_category", kwargs={"name": self.name})
+
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-
+#navbar в конец регистрацию
 class Order:
     pass

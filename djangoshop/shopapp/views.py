@@ -1,8 +1,9 @@
-from django.views.generic import ListView
 from django.shortcuts import render
+from django.views.generic import ListView
+
 from .models import Products
 
-# Create your views here.
+# Create your views here. py manage.py runserver
 
 class HomeView(ListView):
     template_name = 'home.html'
@@ -11,16 +12,15 @@ class HomeView(ListView):
 
     def get_context_data(self, **kwargs: any) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
-        context['page_title'] = 'Домашняя страница магазина '
+        context['title'] = 'Домашняя страница магазина'
         return context
 
 
 def product_view(request, code):
-    queryset = Products.objects.get(product_code=code)
-    return render(request, 'product.html', context={'product': queryset})
+    product = Products.objects.get(product_code=code)
+    title = product.name
+    return render(request, 'product.html', context={'product': product, 'title': title})
 
-if __name__ == '__main__':
-    import os
-    command = 'py manage.py runserver'
-    os.system(command)    
+
     
+#TODO сделать обратную связь через форму, заказы,список заказов по дате и времени 
