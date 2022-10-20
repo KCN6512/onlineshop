@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import DetailView, ListView
 
 from .models import Products
 
@@ -15,11 +15,23 @@ class HomeView(ListView):
         context['title'] = 'Домашняя страница магазина'
         return context
 
+class Product_view(DetailView):
+    template_name = 'product.html'
+    context_object_name = 'product'
 
-def product_view(request, code):
-    product = Products.objects.get(product_code=code)
-    title = product.name
-    return render(request, 'product.html', context={'product': product, 'title': title})
+    def get_object(self):
+        return Products.objects.get(product_code=self.kwargs['product_code'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = self.get_object().name
+        return context
+    
+
+# def product_view(request, code):
+#     product = Products.objects.get(product_code=code)
+#     title = product.name
+#     return render(request, 'product.html', context={'product': product, 'title': title})
 
 
     
