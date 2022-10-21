@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView
 
 from .models import Products
+from .forms import ProductsForm
 
 # Create your views here. py manage.py runserver
 
@@ -15,6 +16,7 @@ class HomeView(ListView):
         context['title'] = 'Домашняя страница магазина'
         return context
 
+
 class Product_view(DetailView):
     template_name = 'product.html'
     context_object_name = 'product'
@@ -26,7 +28,14 @@ class Product_view(DetailView):
         context = super().get_context_data(**kwargs)
         context["title"] = self.get_object().name
         return context
-    
+
+
+def test(request):
+    context = {}
+    all_products = Products.objects.all()
+    context['products'] = all_products
+    context['output'] = ProductsForm(instance=Products.objects.get(pk=1))
+    return render(request, 'test.html', context = context)
 
 # def product_view(request, code):
 #     product = Products.objects.get(product_code=code)
