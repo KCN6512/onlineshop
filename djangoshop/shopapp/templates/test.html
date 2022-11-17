@@ -10,7 +10,7 @@
 <body>
     {% block content %}
     
-    <div class="row">
+    <div class="row mb-2">
         <div class="col-sm-6">
             {% for i in products %}
           <div class="card ml-2">
@@ -25,7 +25,7 @@
         </div>
        
       </div>
-      <table>
+      <table class="table table-bordered ml-2 mb-1">
         {{ output.as_table }}
     </table>
     {% endblock %}
