@@ -7,3 +7,5 @@ urlpatterns = [
     path('product/<int:product_code>', Product_view.as_view(), name='product'),
     path('test', test)
 ]
+
+handler404 = 'shopapp.views.page_not_found'
