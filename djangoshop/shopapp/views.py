@@ -27,7 +27,7 @@ class Product_view(DetailView):
     context_object_name = 'product'
 
     def get_object(self):
-        return  get_object_or_404(Products,product_code=self.kwargs['product_code'])
+        return get_object_or_404(Products,product_code=self.kwargs['product_code'])
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -44,6 +44,7 @@ def test(request):
 
 def page_not_found(request, exception):
     return render(request, '404.html')
+
 # def product_view(request, code):
 #     product = Products.objects.get(product_code=code)
 #     title = product.name
