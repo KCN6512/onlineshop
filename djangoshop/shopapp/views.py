@@ -13,7 +13,7 @@ class HomeView(ListView):
     context_object_name = 'products'
 
     def get(self, request):
-        print(Products.objects.aggregate(Sum('price'))['price__sum'])
+        print(Products.objects.filter(name='Xbox Series X').aggregate(Sum('price'))['price__sum'])
         return super().get(request)
 
     def get_context_data(self, **kwargs: any) -> dict[str, any]:
