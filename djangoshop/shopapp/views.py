@@ -14,6 +14,9 @@ class HomeView(ListView):
 
     def get(self, request):
         print(Products.objects.filter(name='Xbox Series X').aggregate(Sum('price'))['price__sum'])
+        #print(request.META['CONTENT_TYPE'])
+        #print(request.headers['Header_name'])
+        print(request.GET)#get параметры
         return super().get(request)
 
     def get_context_data(self, **kwargs: any) -> dict[str, any]:
