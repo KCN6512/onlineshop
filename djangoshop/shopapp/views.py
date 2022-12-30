@@ -1,9 +1,10 @@
-from django.shortcuts import render, get_object_or_404
-from django.views.generic import DetailView, ListView, TemplateView
-
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.generic import DetailView, ListView
+from django.contrib.auth import login
+from django.contrib import messages
 
 from .models import Products
-from .forms import ProductsForm
+from .forms import ProductsForm, UserRegistrationForm
 from django.db.models import Sum
 # Create your views here.
 
@@ -38,15 +39,18 @@ class ProductView(DetailView):
         return context
 
 
-def test(request):
-    context = {}
-    all_products = Products.objects.all()
-    context['products'] = all_products
-    context['output'] = ProductsForm(instance=Products.objects.get(pk=1))
-    return render(request, 'test.html', context = context)
+def UserRegistration(request):
+    if request.method == 'POST':
+        form = UserRegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("home")
+        return render(request=request, template_name="register.html", \
+        context={"register_form": form})
+        
 
-class Test2(TemplateView):
-    template_name = 'test2.html'
 
 def page_not_found(request, exception):
     return render(request, '404.html')

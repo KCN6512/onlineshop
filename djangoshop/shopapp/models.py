@@ -6,7 +6,7 @@ from django.urls import reverse
 
 class Products(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название')
-    product_code = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(9999999)], verbose_name='Код продукта') # семизначное число
+    product_code = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(9999999)], verbose_name='Код продукта')
     description = models.TextField(verbose_name='Описание товара',default='Тестовое описание товара', blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='products')
