@@ -1,11 +1,12 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import DetailView, ListView
-from django.contrib.auth import login
 from django.contrib import messages
-
-from .models import Products
-from .forms import ProductsForm, UserRegistrationForm
+from django.contrib.auth import login
 from django.db.models import Sum
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.generic import DetailView, ListView
+
+from .forms import ProductsForm, UserRegistrationForm
+from .models import Products
+
 # Create your views here.
 
 class HomeView(ListView):
