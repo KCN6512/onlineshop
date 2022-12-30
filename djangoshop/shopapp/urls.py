@@ -1,11 +1,12 @@
 from django.urls import path
 
-from .views import HomeView, ProductView, UserRegistration
+from .views import HomeView, ProductView, UserRegistration, Login
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
     path('product/<int:product_code>/', ProductView.as_view(), name='product'),
-    path('register/', UserRegistration, name='registration'),
+    path('register/', UserRegistration, name='register'),
+    path('login', Login.as_view(), name='login')
 ]
 
 handler404 = 'shopapp.views.page_not_found'
