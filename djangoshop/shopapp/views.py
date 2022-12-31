@@ -59,6 +59,8 @@ class UserLogin(View):
             if user is not None:
                 login(request, user)
                 return redirect('home')
+        else:
+            return render(request=request, template_name='login.html', context={'form': UserLoginForm})
 
 
 class LogoutView(View):
