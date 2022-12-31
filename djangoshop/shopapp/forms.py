@@ -14,7 +14,14 @@ class ProductsForm(forms.ModelForm):
         model = Products
         fields = '__all__'
 
+
 class UserRegistrationForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ['username', 'email', 'password1', 'password2']
+
+
+class UserLoginForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password']

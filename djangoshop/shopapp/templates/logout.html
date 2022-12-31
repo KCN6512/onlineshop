@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+{% block content %}
+
+{% if user.is_authenticated %}
+
+<div class="container py-5">
+	<h1>Выход из аккаунта</h1>
+	<form method="POST">
+		{% csrf_token %}                   
+		<button class="btn btn-primary" type="submit">Выйти</button>
+	</form>
+</div>
+{% endif %}
+{% endblock content %}
