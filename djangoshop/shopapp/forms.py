@@ -15,13 +15,6 @@ class ProductsForm(forms.ModelForm):
         fields = '__all__'
 
 class UserRegistrationForm(UserCreationForm):
-
-    def save(self, commit=True):
-        user = super(UserRegistrationForm, self).save(commit=False)
-        if commit:
-            user.save()
-        return user
-
     class Meta:
         model = User
         fields = ("username", "email", "password1", "password2")
