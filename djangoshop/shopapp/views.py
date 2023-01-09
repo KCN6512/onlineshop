@@ -1,10 +1,10 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView, ListView, View
-
+from django.views.generic import DetailView, ListView, View, CreateView
+from django.urls import reverse_lazy
 from .forms import UserLoginForm, UserRegistrationForm
-from .models import Categories, Products
+from .models import Products
 
 # Create your views here.
 
@@ -31,19 +31,20 @@ class ProductView(DetailView):
         context["title"] = self.get_object().name
         return context
 
-class UserRegistration(View):
-    def get(self, request, *args, **kwargs):
-        return render(request=request, template_name='register.html',
-        context={'register_form': UserRegistrationForm, 'title': 'Регистрация'})
+class UserRegistration(CreateView):
+    form_class = UserRegistrationForm
+    template_name = 'register.html'
+    success_url = reverse_lazy('login')
 
-    def post(self, request, *args, **kwargs):
-        form = UserRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('home')
-        return render(request=request, template_name='register.html', context={'register_form': form,
-        'title': 'Регистрация'})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Регистрация'
+        return context
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('home')
 
 
 class UserLogin(View):
@@ -79,4 +80,4 @@ def page_not_found(request, exception):
 
 
 
-#TODO сделать обратную связь через форму, заказы,список заказов по дате и времени 
+#TODO сделать обратную связь через форму, заказы,список заказов по дате и времени тесты 
