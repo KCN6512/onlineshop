@@ -1,6 +1,7 @@
 from django.urls import path
 
-from .views import HomeView, ProductView, UserRegistration, UserLogin, LogoutView
+from .views import (HomeView, LogoutView, ProductView, UserLogin,
+                    UserRegistration)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),

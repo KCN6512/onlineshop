@@ -1,12 +1,10 @@
-from django.contrib.auth import login, authenticate, logout
-from django.db.models import Sum
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView, View
-from django.contrib.auth.views import LoginView
-from django.contrib.auth.forms import AuthenticationForm
 
-from .forms import UserRegistrationForm, UserLoginForm
-from .models import Products
+from .forms import UserLoginForm, UserRegistrationForm
+from .models import Categories, Products
 
 # Create your views here.
 
