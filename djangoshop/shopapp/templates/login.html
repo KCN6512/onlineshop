@@ -5,6 +5,7 @@
 
 {% if user.is_authenticated %}
 <h1>Вы уже вошли как {{ user.username }}</h1>
+<p class="text-center"><a href={% url 'logout' %}>Выйти</a></p>
 {% else %}
 
 <div class="container">
@@ -14,6 +15,7 @@
 		{{ form|crispy }}                    
 		<button class="btn btn-primary" type="submit">Вход</button>
 	</form>
+
 </div>
 {% endif %}
 {% endblock content %}

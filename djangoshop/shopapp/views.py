@@ -34,7 +34,7 @@ class ProductView(DetailView):
 class UserRegistration(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('login') #reverse_lazy нужен для классов вьюшек
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,9 +68,6 @@ class UserLogin(View):
 
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
-        return render(request=request, template_name='logout.html')
-
-    def post(self, request, *args, **kwargs):
         logout(request)
         return redirect('home')
 
@@ -80,4 +77,4 @@ def page_not_found(request, exception):
 
 
 
-#TODO сделать обратную связь через форму, заказы,список заказов по дате и времени тесты 
+#TODO сделать обратную связь через форму, корзину, заказы,список заказов по дате и времени тесты 
