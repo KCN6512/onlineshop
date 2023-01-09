@@ -33,7 +33,8 @@ class ProductView(DetailView):
 
 class UserRegistration(View):
     def get(self, request, *args, **kwargs):
-        return render(request=request, template_name='register.html', context={'register_form': UserRegistrationForm})
+        return render(request=request, template_name='register.html',
+        context={'register_form': UserRegistrationForm, 'title': 'Регистрация'})
 
     def post(self, request, *args, **kwargs):
         form = UserRegistrationForm(request.POST)
@@ -41,12 +42,14 @@ class UserRegistration(View):
             user = form.save()
             login(request, user)
             return redirect('home')
-        return render(request=request, template_name='register.html', context={'register_form': form})
+        return render(request=request, template_name='register.html', context={'register_form': form,
+        'title': 'Регистрация'})
 
 
 class UserLogin(View):
     def get(self, request, *args, **kwargs):
-        return render(request=request, template_name='login.html', context={'form': UserLoginForm})
+        return render(request=request, template_name='login.html', context={'form': UserLoginForm,
+        'title': 'Вход'})
 
     def post(self, request, *args, **kwargs):
         form = AuthenticationForm(request, data=request.POST)
@@ -58,7 +61,8 @@ class UserLogin(View):
                 login(request, user)
                 return redirect('home')
         else:
-            return render(request=request, template_name='login.html', context={'form': UserLoginForm})
+            return render(request=request, template_name='login.html',
+            context={'form': UserLoginForm, 'title': 'Вход'})
 
 
 class LogoutView(View):
