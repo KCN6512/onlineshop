@@ -1,10 +1,12 @@
 from django.contrib.auth import login, logout
-from django.shortcuts import get_object_or_404, redirect, render
-from django.views.generic import DetailView, ListView, View, CreateView
-from django.urls import reverse_lazy
-from .forms import  UserRegistrationForm
-from .models import Products
 from django.contrib.auth.views import LoginView
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, View
+
+from .forms import UserRegistrationForm
+from .models import Products
+
 # Create your views here.
 
 class HomeView(ListView):
