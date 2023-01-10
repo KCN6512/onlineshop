@@ -1,11 +1,10 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import DetailView, ListView, View, CreateView
 from django.urls import reverse_lazy
-from .forms import UserLoginForm, UserRegistrationForm
+from .forms import  UserRegistrationForm
 from .models import Products
-
+from django.contrib.auth.views import LoginView
 # Create your views here.
 
 class HomeView(ListView):
@@ -47,23 +46,16 @@ class UserRegistration(CreateView):
         return redirect('home')
 
 
-class UserLogin(View):
-    def get(self, request, *args, **kwargs):
-        return render(request=request, template_name='login.html', context={'form': UserLoginForm,
-        'title': 'Вход'})
+class UserLogin(LoginView):
+    template_name = 'login.html'
 
-    def post(self, request, *args, **kwargs):
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('home')
-        else:
-            return render(request=request, template_name='login.html',
-            context={'form': UserLoginForm, 'title': 'Вход'})
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["title"] = 'Авторизация'
+        return context
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('home')
 
 
 class LogoutView(View):
@@ -77,4 +69,4 @@ def page_not_found(request, exception):
 
 
 
-#TODO сделать обратную связь через форму, корзину, заказы,список заказов по дате и времени тесты 
+#TODO сделать обратную связь через форму, корзину, заказы,список заказов по дате и времени тесты , перенести на postgre и сделать docker
