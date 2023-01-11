@@ -7,7 +7,6 @@ from django.views.generic import CreateView, DetailView, ListView, View
 from .forms import UserRegistrationForm
 from .models import Products
 
-# Create your views here.
 
 class HomeView(ListView):
     template_name = 'home.html'
@@ -32,8 +31,9 @@ class ProductView(DetailView):
         context = super().get_context_data(**kwargs)
         context["title"] = self.get_object().name
         return context
+        
 
-class UserRegistration(CreateView):
+class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register.html'
     success_url = reverse_lazy('login') #reverse_lazy нужен для классов вьюшек
@@ -49,7 +49,7 @@ class UserRegistration(CreateView):
         return redirect('home')
 
 
-class UserLogin(LoginView):
+class UserLoginView(LoginView):
     template_name = 'login.html'
 
     def get_context_data(self, **kwargs):
@@ -67,10 +67,15 @@ class LogoutView(View):
         return redirect('home')
 
 
+class BasketView(ListView):
+    template_name = 'basket.html'
+
+    
 def page_not_found(request, exception):
     return render(request, '404.html')
 
 
 
-#TODO сделать обратную связь через форму, корзину, заказы,список заказов по дате и времени тесты , перенести на postgre и сделать docker
-#потом drf пагинация
+# TODO сделать обратную связь через форму, корзину, заказы,
+# список заказов по дате и времени тесты , перенести на postgre и сделать docker
+# потом drf 

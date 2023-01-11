@@ -23,14 +23,25 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'admin:index' %}">Админка</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'register' %}">Регистрация</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'login' %}">Вход</a>
-                  </li>
               </ul>
             </div>
+            <ul class="nav justify-content-end">
+              {% if user.is_authenticated == False %}
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'register' %}">Регистрация</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'login' %}">Вход</a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link text-dark" href="{% url 'logout' %}">Выйти</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link btn btn-primary" href="{% url 'basket' %}">Корзина</a>
+              </li>
+              {% endif %}
+              </ul>
           </nav>
         <!-- конец navbar -->
 
