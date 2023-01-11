@@ -34,13 +34,6 @@
         <strong>Ой</strong> Мы пока еще не открылись!
       </div>
     {% block content %}
-   <!--<ul class="list-group">
-    {% for i in products %}
-    <li class="list-group-item ">{{ i.name }} | {{ i.categories.all|join:"," }} <a class="btn btn-primary" role="button" href="{{ i.get_absolute_url }}">Страница товара</a>
-        <img class="irounded float-top w-25 pb-3" src="{{ i.image.url }} "> 
-    </li>
-    {% endfor %}
-    </ul> -->
     {% for product in products %}
     <div class="card w-50 ml-2 mb-2">
         <img class="card-img-top w-25 ml-3 mt-3" src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -54,7 +47,37 @@
         </div>
       </div>
     {% endfor %}
+<!-- Pagination bar-->
+    {% if page_obj.has_other_pages %}
+<nav>
+	<ul class="pagination justify-content-center">
+{% if page_obj.has_previous %}
+<li class="page-item">
+	<a class="page-link" href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+</li>
+{% endif %}
+		{% for p in paginator.page_range %}
+		{% if page_obj.number == p %}
+		<li class="page-item"></li>
+    <a class="page-link disabled">{{ p }}</a>
+			{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ p }}">{{ p }}</a>
+		</li>
+		{% endif %}
+		{% endfor %}
+
+		{% if page_obj.has_next %}
+		<li class="page-item">
+			<a class="page-link" href="?page={{ page_obj.next_page_number }}">&gt;</a>
+		</li>
+		{% endif %}
+	</ul>
+</nav>
+{% endif %}
+<!-- Pagination bar end-->
     {% endblock %}
+    
 
 
     <!-- Optional JavaScript -->

@@ -13,6 +13,7 @@ class HomeView(ListView):
     template_name = 'home.html'
     queryset = Products.objects.all()
     context_object_name = 'products'
+    paginate_by = 10
 
     def get_context_data(self, **kwargs: any) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
@@ -72,3 +73,4 @@ def page_not_found(request, exception):
 
 
 #TODO сделать обратную связь через форму, корзину, заказы,список заказов по дате и времени тесты , перенести на postgre и сделать docker
+#потом drf пагинация
