@@ -69,7 +69,7 @@ class LogoutView(View):
 
 class BasketView(ListView):
     template_name = 'basket.html'
-
+    queryset = Products.objects.all()
     
 def page_not_found(request, exception):
     return render(request, '404.html')
@@ -78,4 +78,4 @@ def page_not_found(request, exception):
 
 # TODO сделать обратную связь через форму, корзину, заказы,
 # список заказов по дате и времени тесты , перенести на postgre и сделать docker
-# потом drf 
+# потом drf requirements
