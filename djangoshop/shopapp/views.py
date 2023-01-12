@@ -67,8 +67,8 @@ class LogoutView(View):
         return redirect('home')
 
 
-class BasketView(ListView):
-    template_name = 'basket.html'
+class CartView(ListView):
+    template_name = 'cart.html'
     queryset = Products.objects.all()
     
 def page_not_found(request, exception):
