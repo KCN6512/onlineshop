@@ -9,7 +9,6 @@
           <p class="card-text" >{{ product.description|truncatewords:100 }}</p>
           <h5 class="card-title">Цена : {{ product.price|floatformat }} рублей </h5> 
           <a href='{{ product.get_absolute_url }}' class="btn btn-primary">Подробнее</a>
-          <!-- <a href="{% url 'product' product.product_code %}" class="btn btn-primary">Поasdasdдробнее</a>-->
         </div>
       </div>
     {% endfor %}
@@ -40,6 +39,7 @@
 		{% endif %}
 	</ul>
 </nav>
+
 {% endif %}
 <!-- Pagination bar end-->
     {% endblock %}

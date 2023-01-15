@@ -1,6 +1,7 @@
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -18,20 +19,19 @@ class Products(models.Model):
     def get_absolute_url(self):
         return reverse("product", kwargs={"product_code": self.product_code})
     
-
     class Meta:
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=20)
 
     def __str__(self):
         return f'{self.name}'
 
     def get_absolute_url(self):
-        return reverse("product_category", kwargs={"name": self.name})
+        return reverse("product_category", kwargs={"category_name": self.name})
 
     class Meta:
         verbose_name = 'Категория'
@@ -40,3 +40,6 @@ class Categories(models.Model):
 #navbar в конец регистрацию
 class Order:
     pass
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
