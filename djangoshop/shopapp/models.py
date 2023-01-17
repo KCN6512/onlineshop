@@ -20,6 +20,7 @@ class Products(models.Model):
         return reverse("product", kwargs={"product_code": self.product_code})
     
     class Meta:
+        ordering = ['price']
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
 
@@ -45,6 +46,12 @@ class Categories(models.Model):
 #     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 class FeedbackModel(models.Model):
-    name = models.CharField(max_length=20)
-    text = models.TextField()
-    phone_number = models.CharField(max_length=12)
+    name = models.CharField(max_length=20, verbose_name='Ваше имя')
+    text = models.TextField(verbose_name='Ваше сообщение')
+    phone_number = models.CharField(max_length=12, verbose_name='Ваш телефонный номер')
+
+    def __str__(self) -> str:
+        return f'{self.name} {self.phone_number}'
+    class Meta:
+        verbose_name = 'Обратная связь'
+        verbose_name_plural = 'Обратная связь'

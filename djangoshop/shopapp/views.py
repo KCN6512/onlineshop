@@ -74,12 +74,14 @@ class CartView(ListView):
 
 
 class FeedbackView(CreateView):
-    def get_queryset(self):
-        return FeedbackModel.objects.all()
-    
+    form_class = FeedbackForm
     template_name = "feedback.html"
     success_url = reverse_lazy('home')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Обратная связь'
+        return context
 
 def page_not_found(request, exception):
     return render(request, '404.html')
