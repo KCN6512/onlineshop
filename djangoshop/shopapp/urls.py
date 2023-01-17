@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (HomeView, LogoutView, ProductView, UserLoginView,
-                    UserRegistrationView, CartView)
+                    UserRegistrationView, CartView, FeedbackView)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -9,7 +9,8 @@ urlpatterns = [
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('cart/', CartView.as_view(), name='cart')
+    path('cart/', CartView.as_view(), name='cart',),
+    path('feedback/', FeedbackView.as_view(), name='feedback'),
 
 ]
 

@@ -37,9 +37,14 @@ class Categories(models.Model):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
 
-#navbar в конец регистрацию
-class Order:
-    pass
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+# class Order:
+#     pass
+
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+class FeedbackModel(models.Model):
+    name = models.CharField(max_length=20)
+    text = models.TextField()
+    phone_number = models.CharField(max_length=12)

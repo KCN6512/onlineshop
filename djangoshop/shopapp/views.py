@@ -4,8 +4,8 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
 
-from .forms import UserRegistrationForm
-from .models import Products
+from .forms import UserRegistrationForm, FeedbackForm
+from .models import Products, FeedbackModel
 
 
 class HomeView(ListView):
@@ -70,6 +70,15 @@ class LogoutView(View):
 class CartView(ListView):
     template_name = 'cart.html'
     queryset = Products.objects.all()
+
+
+
+class FeedbackView(CreateView):
+    def get_queryset(self):
+        return FeedbackModel.objects.all()
+    
+    template_name = "feedback.html"
+    success_url = reverse_lazy('home')
     
 
 def page_not_found(request, exception):
@@ -79,4 +88,4 @@ def page_not_found(request, exception):
 
 # TODO сделать обратную связь через форму, корзину, заказы,
 # список заказов по дате и времени тесты , перенести на postgre и сделать docker
-# потом drf requirements очистка корзины
+# потом drf requirements очистка корзины 
