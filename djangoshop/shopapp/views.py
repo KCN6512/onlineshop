@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
 
 from .forms import UserRegistrationForm, FeedbackForm
-from .models import Products, FeedbackModel
+from .models import Products
 
 
 class HomeView(ListView):
@@ -31,7 +31,7 @@ class ProductView(DetailView):
         context = super().get_context_data(**kwargs)
         context["title"] = self.get_object().name
         return context
-        
+
 
 class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
@@ -72,22 +72,27 @@ class CartView(ListView):
     queryset = Products.objects.all()
 
 
-
 class FeedbackView(CreateView):
     form_class = FeedbackForm
     template_name = "feedback.html"
     success_url = reverse_lazy('home')
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Обратная связь'
         return context
+
 
 def page_not_found(request, exception):
     return render(request, '404.html')
 
 
 
-# TODO сделать обратную связь через форму, корзину, заказы,
+# TODO корзину, заказы,
 # список заказов по дате и времени тесты , перенести на postgre и сделать docker
-# потом drf requirements очистка корзины 
+# потом drf requirements очистка корзины debug toolbar  каптча\ профиль пользователя
+# сделать количество просмотра страницы
+
+# толвар по кнопке добавляется в корзину
+# в корзине товары добавляются к заказу и переход на старницу заказа где заказ оформляется
+# кнопку купить сразу которая сразу оформляет заказ

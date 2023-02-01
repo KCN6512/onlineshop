@@ -5,9 +5,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Products(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название')
-    product_code = models.PositiveIntegerField(unique=True, validators=[MaxValueValidator(9999999)], verbose_name='Код продукта')
+    product_code = models.PositiveIntegerField(unique=True,validators=[MaxValueValidator(9999999)], verbose_name='Код продукта')
     description = models.TextField(verbose_name='Описание товара',default='Тестовое описание товара', blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='products')
@@ -20,7 +21,7 @@ class Products(models.Model):
         return reverse("product", kwargs={"product_code": self.product_code})
     
     class Meta:
-        ordering = ['price']
+        ordering = ['-price']
         verbose_name = 'Продукт'
         verbose_name_plural = 'Продукты'
 
@@ -39,12 +40,6 @@ class Categories(models.Model):
         verbose_name_plural = 'Категории'
 
 
-# class Order:
-#     pass
-
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
 class FeedbackModel(models.Model):
     name = models.CharField(max_length=20, verbose_name='Ваше имя')
     text = models.TextField(verbose_name='Ваше сообщение')
@@ -52,6 +47,13 @@ class FeedbackModel(models.Model):
 
     def __str__(self) -> str:
         return f'{self.name} {self.phone_number}'
+        
     class Meta:
         verbose_name = 'Обратная связь'
         verbose_name_plural = 'Обратная связь'
+
+# class Order:
+#     pass
+
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
