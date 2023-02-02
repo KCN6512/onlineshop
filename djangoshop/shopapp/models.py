@@ -52,8 +52,30 @@ class FeedbackModel(models.Model):
         verbose_name = 'Обратная связь'
         verbose_name_plural = 'Обратная связь'
 
-# class Order:
-#     pass
 
-# class UserProfile(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+class CartModel(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    products = models.ManyToManyField(Products, verbose_name='Товары')
+
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
+
+
+class OrderModel(models.Model):
+    order_id = models.PositiveIntegerField(unique=True, null=True)
+    products = models.ManyToManyField(Products)
+    date = models.DateTimeField(auto_now=True)
+    price_sum = models.IntegerField()
+    
+    class Meta:
+        verbose_name = 'Заказ'
+        verbose_name_plural = 'Заказы'
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    orders = models.ManyToManyField(OrderModel, related_name='orders')
+    class Meta:
+        verbose_name = 'Профиль пользователя'
+        verbose_name_plural = 'Профили'

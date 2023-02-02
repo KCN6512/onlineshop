@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
 
 from .forms import UserRegistrationForm, FeedbackForm
-from .models import Products
+from .models import Products, CartModel
 
 
 class HomeView(ListView):
@@ -69,7 +69,8 @@ class LogoutView(View):
 
 class CartView(ListView):
     template_name = 'cart.html'
-    queryset = Products.objects.all()
+    queryset = CartModel.objects.all()
+    context_object_name = 'products'
 
 
 class FeedbackView(CreateView):
@@ -89,10 +90,11 @@ def page_not_found(request, exception):
 
 
 # TODO корзину, заказы,
-# список заказов по дате и времени тесты , перенести на postgre и сделать docker
+# список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
 # потом drf requirements очистка корзины debug toolbar  каптча\ профиль пользователя
 # сделать количество просмотра страницы
 
 # толвар по кнопке добавляется в корзину
 # в корзине товары добавляются к заказу и переход на старницу заказа где заказ оформляется
 # кнопку купить сразу которая сразу оформляет заказ
+# отзывы
