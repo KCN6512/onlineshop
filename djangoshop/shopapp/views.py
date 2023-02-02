@@ -3,6 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import UserRegistrationForm, FeedbackForm
 from .models import Products, CartModel
@@ -67,11 +68,14 @@ class LogoutView(View):
         return redirect('home')
 
 
-class CartView(ListView):
+class CartView(LoginRequiredMixin, ListView):
     template_name = 'cart.html'
-    queryset = CartModel.objects.all()
-    context_object_name = 'products'
+    context_object_name = 'cart'
 
+    def get_queryset(self):
+        queryset = CartModel.objects.get(user=self.request.user)
+        return queryset
+    
 
 class FeedbackView(CreateView):
     form_class = FeedbackForm

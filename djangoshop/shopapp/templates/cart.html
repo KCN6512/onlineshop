@@ -2,10 +2,12 @@
 
 
 {% block content %}
-    
-    {% for product in products %}
-        <p>{{ product.name }}</p>
-    {% endfor %}
+    <p>{{cart}}</p>
+    <p>{{cart.user}}</p>
+    <p>{{cart.products}}</p>
+    <p>{{ cart.products.all }}</p>
+
+
         
 
 {% endblock content %}

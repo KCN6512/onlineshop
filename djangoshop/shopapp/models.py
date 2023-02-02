@@ -57,6 +57,9 @@ class CartModel(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     products = models.ManyToManyField(Products, verbose_name='Товары')
 
+    def __str__(self):
+        return self.user.username + ' ' 'корзина'
+
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
