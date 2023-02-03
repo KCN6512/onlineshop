@@ -18,6 +18,9 @@
           <h7 class="card-title">Код товара : {{ product.product_code }}</h7>
           <p class="card-text" >{{ product.description }}</p>
           <h5 class="card-title">Цена : {{ product.price|floatformat }} рублей </h5>
+          <form method="POST" action="{% url 'add_product' product.product_code %}">
+            {% csrf_token %}<input class="btn btn-success" type="submit" value="Добавить в корзину">
+         </form>
         </div>
       </div>
     {% endblock %}

@@ -77,10 +77,18 @@ class CartView(LoginRequiredMixin, ListView):
         queryset = CartModel.objects.get(user=self.request.user)
         return queryset
 
+
 def remove_product_from_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
     cart.products.remove(product)
+    return HttpResponseRedirect(reverse_lazy('cart'))
+
+
+def add_product_to_cart_view(request, product_code):
+    product = get_object_or_404(Products, product_code=product_code)
+    cart = get_object_or_404(CartModel, user=request.user)
+    cart.products.add(product)
     return HttpResponseRedirect(reverse_lazy('cart'))
 
 
