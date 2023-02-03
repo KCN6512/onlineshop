@@ -1,8 +1,9 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, View
+from django.views.generic import CreateView, DetailView, ListView, View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import UserRegistrationForm, FeedbackForm
@@ -75,7 +76,13 @@ class CartView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = CartModel.objects.get(user=self.request.user)
         return queryset
-    
+
+def remove_product_from_cart_view(request, product_code):
+    product = get_object_or_404(Products, product_code=product_code)
+    cart = get_object_or_404(CartModel, user=request.user)
+    cart.products.remove(product)
+    return HttpResponseRedirect(reverse_lazy('cart'))
+
 
 class FeedbackView(CreateView):
     form_class = FeedbackForm
@@ -86,6 +93,7 @@ class FeedbackView(CreateView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Обратная связь'
         return context
+
 
 
 def page_not_found(request, exception):

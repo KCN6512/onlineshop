@@ -1,7 +1,6 @@
 from django.urls import path
 
-from .views import (HomeView, LogoutView, ProductView, UserLoginView,
-                    UserRegistrationView, CartView, FeedbackView)
+from .views import *
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -11,6 +10,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('cart/', CartView.as_view(), name='cart',),
     path('feedback/', FeedbackView.as_view(), name='feedback'),
+    path('remove_product/<int:product_code>', remove_product_from_cart_view, name='remove_product')
 
 ]
 

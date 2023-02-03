@@ -2,13 +2,19 @@
 
 
 {% block content %}
-    <p>{{cart}}</p>
-    <p>{{cart.user}}</p>
-    <p>{{cart.products}}</p>
-    <p>{{ cart.products.all }}</p>
-
-
-        
+<ul class="list-group">
+    {% for product in cart.products.all %}
+    <li class="list-group-item">{{product.name}} <img src="{{ product.image.url }}" width="70" height="66">
+    <a class="btn btn-outline-primary" href="{{ product.get_absolute_url }}">Товар</a>
+    <form method="POST" action="{% url 'remove_product' product.product_code %}">
+        {% csrf_token %}<input type="submit" value="DELETE">
+     </form>
+    </li>
+    
+    {% endfor %}
+    
+  </ul>
+    
 
 {% endblock content %}
     
