@@ -4,9 +4,9 @@ from django.dispatch import receiver
 
 from .models import UserProfile, CartModel
 
-
+#при регистрации пользователя создает ему корзину и профиль с заказами
 @receiver(post_save, sender=User)
-def create_or_save_profile(sender, instance, created, **kwargs):
+def create_profile_and_cart(sender, instance, created, **kwargs):
     if created:
         cart = CartModel.objects.create(user=instance)
         UserProfile.objects.create(user=instance, cart=cart)

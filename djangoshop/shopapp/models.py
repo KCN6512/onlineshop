@@ -81,6 +81,8 @@ class UserProfile(models.Model):
     orders = models.ManyToManyField(OrderModel, related_name='orders')
     cart = models.OneToOneField(CartModel, on_delete=models.PROTECT)
     
+    def __str__(self) -> str:
+        return f'{self.user} профиль'
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили'

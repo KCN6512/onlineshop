@@ -2,9 +2,8 @@ from django.contrib import admin
 
 from .models import *
 
-admin.site.register(Products)
-admin.site.register(Categories)
-admin.site.register(FeedbackModel)
-admin.site.register(CartModel)
-admin.site.register(OrderModel)
-admin.site.register(UserProfile)
+
+models_list = [Products, Categories, FeedbackModel, CartModel, OrderModel, 
+              UserProfile]
+
+admin.site.register(models_list)
