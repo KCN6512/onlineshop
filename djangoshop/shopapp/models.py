@@ -79,6 +79,7 @@ class OrderModel(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     orders = models.ManyToManyField(OrderModel, related_name='orders')
+    cart = models.OneToOneField(CartModel, on_delete=models.PROTECT)
     
     class Meta:
         verbose_name = 'Профиль пользователя'

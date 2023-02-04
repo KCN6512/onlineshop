@@ -2,12 +2,14 @@
 
 
 {% block content %}
+{{ user.profile.cart }}
 <ul class="list-group">
     {% for product in cart.products.all %}
     <li class="list-group-item">{{product.name}} <img src="{{ product.image.url }}" width="70" height="66">
     <a class="btn btn-outline-primary" href="{{ product.get_absolute_url }}">Товар</a>
     <form method="POST" action="{% url 'remove_product' product.product_code %}">
-        {% csrf_token %}<input class="btn btn-danger" type="submit" value="Убрать">
+        {% csrf_token %}
+        <input class="btn btn-danger" type="submit" value="Убрать">
      </form>
     </li>
     

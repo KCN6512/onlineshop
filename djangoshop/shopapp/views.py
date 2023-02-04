@@ -87,15 +87,14 @@ def remove_product_from_cart_view(request, product_code):
 
 def add_product_to_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
-    cart, created = CartModel.objects.get_or_create(user=request.user)
-    print(cart)
+    cart, created = CartModel.objects.get_or_create(user=request.user) #заменить на создание профиля и корзины при регистрации
     cart.products.add(product)
     return HttpResponseRedirect(reverse_lazy('cart'))
 
 
 class FeedbackView(CreateView):
     form_class = FeedbackForm
-    template_name = "feedback.html"
+    template_name = 'feedback.html'
     success_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
@@ -103,6 +102,10 @@ class FeedbackView(CreateView):
         context['title'] = 'Обратная связь'
         return context
 
+
+class Order(CreateView):
+    template_name = 'order.html'
+    success_url = reverse_lazy('thanks')
 
 
 def page_not_found(request, exception):
