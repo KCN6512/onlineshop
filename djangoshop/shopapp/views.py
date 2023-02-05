@@ -87,7 +87,7 @@ def remove_product_from_cart_view(request, product_code):
 
 def add_product_to_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
-    cart, created = CartModel.objects.get_or_create(user=request.user) #заменить на создание профиля и корзины при регистрации
+    cart = get_object_or_404(CartModel, user=request.user)
     cart.products.add(product)
     return HttpResponseRedirect(reverse_lazy('cart'))
 
@@ -116,8 +116,6 @@ def page_not_found(request, exception):
 # TODO заказы,
 # список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
 # потом drf requirements  debug toolbar  профиль пользователя
-# корзина пустая выдает ошибку
-# корзина и профиль создаются при регистрации
 
 # в корзине товары добавляются к заказу и переход на старницу заказа где заказ оформляется
 # отзывы

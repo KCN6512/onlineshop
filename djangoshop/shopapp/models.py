@@ -66,8 +66,9 @@ class CartModel(models.Model):
 
 
 class OrderModel(models.Model):
-    order_id = models.PositiveIntegerField(unique=True, null=True)
-    products = models.ManyToManyField(Products)
+    user = models.ForeignKey(User, verbose_name='покупатель', on_delete=models.CASCADE)
+    order_id = models.PositiveIntegerField(unique=True, null=True, verbose_name='номер заказа')
+    products = models.ManyToManyField(Products, verbose_name='номер заказа')
     date = models.DateTimeField(auto_now=True)
     price_sum = models.IntegerField()
     
@@ -83,6 +84,7 @@ class UserProfile(models.Model):
     
     def __str__(self) -> str:
         return f'{self.user} профиль'
+        
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили'
