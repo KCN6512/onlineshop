@@ -5,7 +5,10 @@
 {{ user.profile.cart }}
 <ul class="list-group">
     {% for product in cart.products.all %}
-    <li class="list-group-item">{{product.name}} <img src="{{ product.image.url }}" width="70" height="66">
+    <li class="list-group-item">
+      <p class="mb-0">{{product.name}} </p>
+    <img src="{{ product.image.url }}" width="70" height="66">
+    <p>{{ product.price}} рублей</p>
     <a class="btn btn-outline-primary" href="{{ product.get_absolute_url }}">Товар</a>
     <form method="POST" action="{% url 'remove_product' product.product_code %}">
         {% csrf_token %}
@@ -17,6 +20,6 @@
     
   </ul>
     
-
+<h1 class="display-4">Итого: {{ total_price }} рублей</h1>
 {% endblock content %}
     

@@ -60,17 +60,22 @@ class CartModel(models.Model):
     def __str__(self):
         return self.user.username + ' ' 'корзина'
 
+    def price_summary(self):
+        return f"{self.products.all().aggregate(models.Sum('price'))['price__sum']:.2f}"
+
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
 
 
-class OrderModel(models.Model):
+class OrderModel(models.Model):#сделать миграцию
     user = models.ForeignKey(User, verbose_name='покупатель', on_delete=models.CASCADE)
     order_id = models.PositiveIntegerField(unique=True, null=True, verbose_name='номер заказа')
     products = models.ManyToManyField(Products, verbose_name='номер заказа')
     date = models.DateTimeField(auto_now=True)
-    price_sum = models.IntegerField()
+    
+    def price_summary(self):
+        return f"{self.products.all().aggregate(models.Sum('price'))['price__sum']:.2f}"
     
     class Meta:
         verbose_name = 'Заказ'

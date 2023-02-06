@@ -56,7 +56,7 @@ class UserLoginView(LoginView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["title"] = 'Авторизация'
+        context['title'] = 'Авторизация'
         return context
 
     def get_success_url(self) -> str:
@@ -76,6 +76,12 @@ class CartView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         queryset = CartModel.objects.get(user=self.request.user)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Корзина'
+        context['total_price'] = self.get_queryset().price_summary()
+        return context
 
 
 def remove_product_from_cart_view(request, product_code):
@@ -106,6 +112,11 @@ class FeedbackView(CreateView):
 class Order(CreateView):
     template_name = 'order.html'
     success_url = reverse_lazy('thanks')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Заказы'
+        return context
 
 
 def page_not_found(request, exception):
