@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
-from .forms import UserRegistrationForm, FeedbackForm
+from .forms import UserRegistrationForm, FeedbackForm, OrderForm
 from .models import Products, CartModel
 
 
@@ -103,18 +102,13 @@ class FeedbackView(CreateView):
     template_name = 'feedback.html'
     success_url = reverse_lazy('home')
 
-    def get_initial(self):
-        return {
-            'name':self.request.user,
-        }
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Обратная связь'
         return context
 
 
-class Order(CreateView):
+class OrderView(CreateView):
     template_name = 'order.html'
     success_url = reverse_lazy('thanks')
 
@@ -123,11 +117,16 @@ class Order(CreateView):
         context['title'] = 'Заказы'
         return context
 
+    def get(self, request, *args, **kwargs):
+        context = {'form': OrderForm(initial={'user': request.user})}#выбор товаров из корзины не работает
+        return render(request, self.template_name, context=context)
 
 def page_not_found(request, exception):
     return render(request, '404.html')
 
-
+# def get_queryset(self):
+#     queryset = get_object_or_404(UserProfile, self.request.user)
+#     return queryset
 
 # TODO заказы,
 # список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
