@@ -1,9 +1,9 @@
+from django.utils import timezone
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-
-# Create your models here.
+import uuid
 
 
 class Products(models.Model):
@@ -22,8 +22,8 @@ class Products(models.Model):
     
     class Meta:
         ordering = ['-price']
-        verbose_name = 'Продукт'
-        verbose_name_plural = 'Продукты'
+        verbose_name = 'Товар'
+        verbose_name_plural = 'Товары'
 
 
 class Categories(models.Model):
@@ -68,14 +68,17 @@ class CartModel(models.Model):
         verbose_name_plural = 'Корзины'
 
 
-class OrderModel(models.Model):#сделать миграцию
-    user = models.ForeignKey(User, verbose_name='покупатель', on_delete=models.CASCADE)
-    order_id = models.PositiveIntegerField(unique=True, null=True, verbose_name='номер заказа')
-    products = models.ManyToManyField(Products, verbose_name='номер заказа')
-    date = models.DateTimeField(auto_now=True)
+class OrderModel(models.Model):
+    user = models.ForeignKey(User, verbose_name='покупатель', on_delete=models.CASCADE, blank=False, null=True)
+    order_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Номер заказа')
+    products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
+    date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     
     def price_summary(self):
         return f"{self.products.all().aggregate(models.Sum('price'))['price__sum']:.2f}"
+
+    def __str__(self):
+        return f'{self.user} {self.order_id } {self.date}'
     
     class Meta:
         verbose_name = 'Заказ'
