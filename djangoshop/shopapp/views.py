@@ -3,9 +3,9 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, View, DeleteView
+from django.views.generic import CreateView, DetailView, ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-
+from django.contrib.auth.models import User
 from .forms import UserRegistrationForm, FeedbackForm
 from .models import Products, CartModel
 
@@ -102,6 +102,11 @@ class FeedbackView(CreateView):
     form_class = FeedbackForm
     template_name = 'feedback.html'
     success_url = reverse_lazy('home')
+
+    def get_initial(self):
+        return {
+            'name':self.request.user,
+        }
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

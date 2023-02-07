@@ -1,9 +1,7 @@
-from django.utils import timezone
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
-import uuid
 
 
 class Products(models.Model):
