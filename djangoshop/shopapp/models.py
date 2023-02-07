@@ -69,8 +69,14 @@ class CartModel(models.Model):
 
 
 class OrderModel(models.Model):
+    def get_order_id():
+        last_order = OrderModel.objects.all().last()
+        if not last_order:
+            return 1
+        return last_order.id + 1
+
     user = models.ForeignKey(User, verbose_name='покупатель', on_delete=models.CASCADE, blank=False, null=True)
-    order_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False, verbose_name='Номер заказа')
+    order_id = models.PositiveIntegerField(unique=True, default=get_order_id, verbose_name='Номер заказа')
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     
