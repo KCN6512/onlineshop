@@ -17,9 +17,9 @@ class FeedbackForm(forms.ModelForm):
         fields = '__all__'
 
 
-class OrderForm(forms.ModelForm):
-    user = forms.CharField(label='Ваше имя', max_length=30)
+# class OrderForm(forms.ModelForm):
+#     user = forms.CharField(label='Ваше имя', max_length=30)
 
-    class Meta:
-        model = CartModel
-        fields = ['user', 'products']
+#     class Meta:
+#         model = CartModel
+#         fields = ['user', 'products']

@@ -1,12 +1,12 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserRegistrationForm, FeedbackForm, OrderForm
-from .models import Products, CartModel
+from .forms import UserRegistrationForm, FeedbackForm
+from .models import Products, CartModel, OrderModel
 
 
 class HomeView(ListView):
@@ -79,7 +79,10 @@ class CartView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Корзина'
-        context['total_price'] = self.get_queryset().price_summary()
+
+        if self.get_queryset().products.exists():
+            context['total_price'] = self.get_queryset().price_summary()
+
         return context
 
 
@@ -108,25 +111,32 @@ class FeedbackView(CreateView):
         return context
 
 
-class OrderView(CreateView):
-    template_name = 'order.html'
+class OrderView(View):
     success_url = reverse_lazy('thanks')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Заказы'
-        return context
-
     def get(self, request, *args, **kwargs):
-        context = {'form': OrderForm(initial={'user': request.user})}#выбор товаров из корзины не работает
-        return render(request, self.template_name, context=context)
+        return render(request, 'order.html')
+
+    def post(self, request, *args, **kwargs):
+        try:
+            order = OrderModel()
+            order.save()
+            products = CartModel.objects.get(user=request.user).products.all()
+            order.products.set(products)
+            order.user = request.user
+            order.save()
+        except:
+            HttpResponse('Произошла ошибка, попробуйте попоже')
+        finally:
+            cart = CartModel.objects.get(user=request.user)
+            items_to_remove = [i for i in cart.products.all()]
+            cart.products.remove(*items_to_remove)
+
+        return HttpResponseRedirect(reverse_lazy('home'))#сменить на благодарность
+
 
 def page_not_found(request, exception):
     return render(request, '404.html')
-
-# def get_queryset(self):
-#     queryset = get_object_or_404(UserProfile, self.request.user)
-#     return queryset
 
 # TODO заказы,
 # список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
