@@ -2,8 +2,8 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy, reverse
-from django.views.generic import CreateView, DetailView, ListView, View
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView, View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegistrationForm, FeedbackForm
 from .models import FeedbackModel, Products, CartModel, OrderModel, UserProfile
@@ -112,7 +112,7 @@ class FeedbackView(CreateView):
 
 
 class OrderView(View):
-    success_url = reverse_lazy('thanks')
+    success_url = reverse_lazy('thanks')#TODO сделать thanks.html
 
     def get(self, request, *args, **kwargs):
         return render(request, 'order.html')
@@ -125,6 +125,8 @@ class OrderView(View):
             order.products.set(products)
             order.user = request.user
             order.save()
+            profile = UserProfile.objects.get(user=self.request.user)
+            profile.orders.add(order)
         except:
             HttpResponse('Произошла ошибка, попробуйте попоже')
         finally:
@@ -134,17 +136,14 @@ class OrderView(View):
 
         return HttpResponseRedirect(reverse_lazy('home'))#TODO сменить на благодарность
 
-class ProfileView(ListView):
+class ProfileView(TemplateView):
     template_name = 'profile.html'
-    context_object_name = 'asd'
+    context_object_name = 'profile'
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = self.request.user.userprofile
+        context['orders'] = 'Order'
         return context
-    def get_queryset(self):
-        queryset = UserProfile.objects.get(user=self.request.user)
-        return queryset
-
 
 def page_not_found(request, exception):
     return render(request, '404.html')
