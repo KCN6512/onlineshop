@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegistrationForm, FeedbackForm
-from .models import FeedbackModel, Products, CartModel, OrderModel, UserProfile
+from .models import Products, CartModel, OrderModel, UserProfile
 
 
 class HomeView(ListView):
@@ -136,14 +136,16 @@ class OrderView(View):
 
         return HttpResponseRedirect(reverse_lazy('home'))#TODO сменить на благодарность
 
+
 class ProfileView(TemplateView):
     template_name = 'profile.html'
     context_object_name = 'profile'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['orders'] = 'Order'
+        context['profile'] = UserProfile.objects.get(user=self.request.user)
         return context
+
 
 def page_not_found(request, exception):
     return render(request, '404.html')

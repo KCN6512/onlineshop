@@ -2,6 +2,13 @@
 
 
 {% block content %}
+    {% for i in profile.orders.all %}
+        <p>{{ i.order_id }}</p>
+        <p>{{ i.date }}</p>
+        <p>{{ i.products.all }}</p>
+
+    
+    {% endfor %}
 
         
 {% endblock content %}
