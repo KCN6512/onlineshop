@@ -15,11 +15,3 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = FeedbackModel
         fields = '__all__'
-
-
-# class OrderForm(forms.ModelForm):
-#     user = forms.CharField(label='Ваше имя', max_length=30)
-
-#     class Meta:
-#         model = CartModel
-#         fields = ['user', 'products']

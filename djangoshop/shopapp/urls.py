@@ -14,6 +14,7 @@ urlpatterns = [
     path('add_product/<int:product_code>/', add_product_to_cart_view, name='add_product'),
     #path('profile/', ProfileView.as_view(), name='profile'),
     path('cart/order/', OrderView.as_view(), name='order'),
+    path('profile', ProfileView.as_view(), name='profile'),
 
 ]
 

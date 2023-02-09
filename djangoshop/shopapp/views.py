@@ -6,7 +6,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, ListView, View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegistrationForm, FeedbackForm
-from .models import Products, CartModel, OrderModel
+from .models import FeedbackModel, Products, CartModel, OrderModel, UserProfile
 
 
 class HomeView(ListView):
@@ -119,7 +119,7 @@ class OrderView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            order = OrderModel()
+            order = OrderModel()#TODO попробовать убрать лишний save
             order.save()
             products = CartModel.objects.get(user=request.user).products.all()
             order.products.set(products)
@@ -132,7 +132,14 @@ class OrderView(View):
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
 
-        return HttpResponseRedirect(reverse_lazy('home'))#сменить на благодарность
+        return HttpResponseRedirect(reverse_lazy('home'))#TODO сменить на благодарность
+
+class ProfileView(ListView):
+    template_name = 'profile.html'
+
+    def get_queryset(self):
+        queryset = UserProfile.objects.filter(user=self.request.user)
+        return queryset
 
 
 def page_not_found(request, exception):
