@@ -136,9 +136,13 @@ class OrderView(View):
 
 class ProfileView(ListView):
     template_name = 'profile.html'
-
+    context_object_name = 'asd'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['profile'] = self.request.user.userprofile
+        return context
     def get_queryset(self):
-        queryset = UserProfile.objects.filter(user=self.request.user)
+        queryset = UserProfile.objects.get(user=self.request.user)
         return queryset
 
 

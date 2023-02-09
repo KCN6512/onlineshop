@@ -1,1 +1,19 @@
 {% extends 'base.html' %}
+
+
+{% block content %}
+   пользователь {{ profile.user }}
+    корзина {{ profile.cart }}
+    заказы {{profile.orders}}
+    заказы all {{profile.orders.all}}
+    {% for i in profile.orders.all %}
+        <p>{{ i }}</p>
+        <p>{{ i.order_id }}</p>
+        <p>{{ i.date }}</p>
+        <p>{{ i }}</p>
+        <p>{{ i.products.all }}</p>
+        <p>{{ i.products }}</p>
+    {% endfor %}
+        
+{% endblock content %}
+    

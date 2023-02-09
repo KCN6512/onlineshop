@@ -1,4 +1,4 @@
-from django.core.validators import MaxValueValidator
+from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -43,7 +43,8 @@ class Categories(models.Model):
 class FeedbackModel(models.Model):
     name = models.CharField(max_length=20, verbose_name='Ваше имя')
     text = models.TextField(verbose_name='Ваше сообщение')
-    phone_number = models.CharField(max_length=12, verbose_name='Ваш телефонный номер')
+    phone_number = models.CharField(max_length=12, verbose_name='Ваш телефонный номер', 
+                                    validators=[RegexValidator(regex=r'^\+?1?\d{9,11}$')])
 
     def __str__(self) -> str:
         return f'{self.name} {self.phone_number}'
@@ -54,7 +55,8 @@ class FeedbackModel(models.Model):
 
 
 class CartModel(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    user = models.OneToOneField(User, on_delete=models.CASCADE,
+                               verbose_name='Пользователь')
     products = models.ManyToManyField(Products, verbose_name='Товары')
 
     def __str__(self):
@@ -78,7 +80,7 @@ class OrderModel(models.Model):
     user = models.ForeignKey(User, verbose_name='покупатель',
     on_delete=models.CASCADE, blank=False, null=True)
     order_id = models.PositiveIntegerField(unique=True, default=get_order_id,
-    verbose_name='Номер заказа')
+                                          verbose_name='Номер заказа')
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     
