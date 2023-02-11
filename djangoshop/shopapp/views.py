@@ -112,29 +112,33 @@ class FeedbackView(CreateView):
 
 
 class OrderView(View):
-    success_url = reverse_lazy('thanks')#TODO сделать thanks.html
 
     def get(self, request, *args, **kwargs):
+        cart = CartModel.objects.get(user=request.user)
+        if not cart.products.exists():
+            return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
         return render(request, 'order.html')
 
     def post(self, request, *args, **kwargs):
         try:
-            order = OrderModel()#TODO попробовать убрать лишний save
+            order = OrderModel()
             order.save()
             products = CartModel.objects.get(user=request.user).products.all()
             order.products.set(products)
             order.user = request.user
+            if not order.products.exists():
+                return HttpResponse('<h1>Произошла ошибка, попробуйте попоже</h1>')
             order.save()
             profile = UserProfile.objects.get(user=self.request.user)
             profile.orders.add(order)
         except:
-            HttpResponse('Произошла ошибка, попробуйте попоже')
+            return HttpResponse('<h1>Произошла ошибка, попробуйте попоже</h1>')
         finally:
             cart = CartModel.objects.get(user=request.user)
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
 
-        return HttpResponseRedirect(reverse_lazy('home'))#TODO сменить на благодарность
+        return HttpResponseRedirect(reverse_lazy('thanks'))
 
 
 class ProfileView(TemplateView):
@@ -145,6 +149,9 @@ class ProfileView(TemplateView):
         context = super().get_context_data(**kwargs)
         context['profile'] = UserProfile.objects.get(user=self.request.user)
         return context
+
+class ThanksView(TemplateView):
+    template_name = 'thanks.html'
 
 
 def page_not_found(request, exception):
