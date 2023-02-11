@@ -63,7 +63,9 @@ class CartModel(models.Model):
         return self.user.username + ' ' 'корзина'
 
     def price_summary(self):
-        return f"{self.products.all().aggregate(models.Sum('price'))['price__sum']:.2f}"
+        price = self.products.all().aggregate(models.Sum('price'))['price__sum']
+        print(price)
+        return f"{price}"
 
     class Meta:
         verbose_name = 'Корзина'
@@ -85,7 +87,9 @@ class OrderModel(models.Model):
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     
     def price_summary(self):
-        return f"{self.products.all().aggregate(models.Sum('price'))['price__sum']:.2f}"
+        price = self.products.all().aggregate(models.Sum('price'))['price__sum']
+        print(price)
+        return f"{price}"
 
     def __str__(self):
         return f'{self.user} {self.order_id } {self.date}'

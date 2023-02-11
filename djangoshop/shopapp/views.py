@@ -115,9 +115,14 @@ class OrderView(View):
 
     def get(self, request, *args, **kwargs):
         cart = CartModel.objects.get(user=request.user)
+        price = cart.price_summary() if cart.price_summary() else None
+        print(price)
+        context = {'price': price}
+
         if not cart.products.exists():
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
-        return render(request, 'order.html')
+
+        return render(request, 'order.html', context=context)
 
     def post(self, request, *args, **kwargs):
         try:
@@ -159,7 +164,6 @@ def page_not_found(request, exception):
 
 # TODO заказы,
 # список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
-# потом drf requirements  debug toolbar  профиль пользователя
-
-# в корзине товары добавляются к заказу и переход на старницу заказа где заказ оформляется
+# потом drf requirements debug toolbar
+# в оформлении заказа сумма товаров
 # отзывы
