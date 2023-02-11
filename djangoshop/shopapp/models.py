@@ -64,7 +64,6 @@ class CartModel(models.Model):
 
     def price_summary(self):
         price = self.products.all().aggregate(models.Sum('price'))['price__sum']
-        print(price)
         return f"{price}"
 
     class Meta:
@@ -88,7 +87,6 @@ class OrderModel(models.Model):
     
     def price_summary(self):
         price = self.products.all().aggregate(models.Sum('price'))['price__sum']
-        print(price)
         return f"{price}"
 
     def __str__(self):
@@ -97,6 +95,7 @@ class OrderModel(models.Model):
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'
+        ordering = ['-date']
 
 
 class UserProfile(models.Model):

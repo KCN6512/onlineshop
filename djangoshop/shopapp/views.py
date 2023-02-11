@@ -116,7 +116,6 @@ class OrderView(View):
     def get(self, request, *args, **kwargs):
         cart = CartModel.objects.get(user=request.user)
         price = cart.price_summary() if cart.price_summary() else None
-        print(price)
         context = {'price': price}
 
         if not cart.products.exists():
@@ -165,5 +164,3 @@ def page_not_found(request, exception):
 # TODO заказы,
 # список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
 # потом drf requirements debug toolbar
-# в оформлении заказа сумма товаров
-# отзывы

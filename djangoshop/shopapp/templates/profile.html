@@ -3,11 +3,14 @@
 
 {% block content %}
     {% for i in profile.orders.all %}
-        <p>{{ i.order_id }}</p>
-        <p>{{ i.date }}</p>
-        <p>{{ i.products.all }}</p>
-
-    
+    <div class="card w-50 ml-2 mb-2">
+        <div class="card-body">
+            <h4>Номер заказа: {{ i.order_id }}</h4>
+            <h4>Дата заказа: {{ i.date }}</h4>
+          <h6 class="card-title">Товары: {{ i.products.all|join:',' }}</h5>
+          <h5 class="card-title">Цена : {{ i.price_summary|floatformat }} рублей </h5> 
+        </div>
+      </div>
     {% endfor %}
 
         
