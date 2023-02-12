@@ -10,7 +10,7 @@ class Products(models.Model):
     validators=[MaxValueValidator(9999999)], verbose_name='Код продукта')
     description = models.TextField(verbose_name='Описание товара',
     default='Тестовое описание товара', blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена за единицу')
+    price = models.DecimalField(max_digits=15, decimal_places=2, verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='products')
     image = models.ImageField(null=True)
 

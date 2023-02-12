@@ -154,6 +154,7 @@ class ProfileView(TemplateView):
         context['profile'] = UserProfile.objects.get(user=self.request.user)
         return context
 
+
 class ThanksView(TemplateView):
     template_name = 'thanks.html'
 
@@ -161,6 +162,7 @@ class ThanksView(TemplateView):
 def page_not_found(request, exception):
     return render(request, '404.html')
 
-# TODO заказы,
-# список заказов по дате в профиле и времени тесты , перенести на postgre и сделать docker
-# потом drf requirements debug toolbar
+
+# TODO 
+# тесты  и сделать docker
+# потом drf requirements debug toolbar slecet prefetch related cache
