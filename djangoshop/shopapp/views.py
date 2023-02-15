@@ -166,3 +166,5 @@ def page_not_found(request, exception):
 # TODO 
 # тесты  и сделать docker
 # потом drf requirements debug toolbar slecet prefetch related cache
+# после оптимизации видео
+# TODO env settings и sec key

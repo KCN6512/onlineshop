@@ -138,6 +138,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
-STATIC_URL = '/static/'
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
