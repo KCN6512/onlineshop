@@ -60,7 +60,7 @@ class CartModel(models.Model):
     products = models.ManyToManyField(Products, verbose_name='Товары')
 
     def __str__(self):
-        return self.user.username + ' ' 'корзина'
+        return f'{self.user.username} "корзина"'
 
     def price_summary(self):
         price = self.products.all().aggregate(models.Sum('price')).get('price__sum')

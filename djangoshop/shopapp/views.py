@@ -152,6 +152,7 @@ class ProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['profile'] = UserProfile.objects.get(user=self.request.user)
+        context['title'] = 'Профиль'
         return context
 
 
