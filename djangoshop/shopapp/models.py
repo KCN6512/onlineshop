@@ -27,7 +27,7 @@ class Products(models.Model):
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=20)
+    name = models.CharField(max_length=20, verbose_name='Игровая консоль')
 
     def __str__(self):
         return f'{self.name}'
@@ -63,7 +63,7 @@ class CartModel(models.Model):
         return self.user.username + ' ' 'корзина'
 
     def price_summary(self):
-        price = self.products.all().aggregate(models.Sum('price'))['price__sum']
+        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
         return f"{price}"
 
     class Meta:
@@ -86,7 +86,7 @@ class OrderModel(models.Model):
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     
     def price_summary(self):
-        price = self.products.all().aggregate(models.Sum('price'))['price__sum']
+        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
         return f"{price}"
 
     def __str__(self):
