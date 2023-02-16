@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, View, TemplateView
+from django.views.generic import CreateView, ListView, View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegistrationForm, FeedbackForm
 from .models import Products, CartModel, OrderModel, UserProfile
@@ -11,7 +11,7 @@ from .models import Products, CartModel, OrderModel, UserProfile
 
 class HomeView(ListView):
     template_name = 'home.html'
-    queryset = Products.objects.all()
+    queryset = Products.objects.all().prefetch_related('categories')
     context_object_name = 'products'
     paginate_by = 5
 
@@ -107,7 +107,7 @@ class FeedbackView(CreateView):
         context['title'] = 'Обратная связь'
         return context
 
-
+#TODO несостоявшиеся заказа увеличивают номер заказа
 class OrderView(View):
 
     def get(self, request, *args, **kwargs):
@@ -128,12 +128,12 @@ class OrderView(View):
             order.products.set(products)
             order.user = request.user
             if not order.products.exists():
-                return HttpResponse('<h1>Произошла ошибка, попробуйте попоже</h1>')
+                return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
             order.save()
             profile = UserProfile.objects.get(user=self.request.user)
             profile.orders.add(order)
         except:
-            return HttpResponse('<h1>Произошла ошибка, попробуйте попоже</h1>')
+            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
         finally:
             cart = CartModel.objects.get(user=request.user)
             items_to_remove = [i for i in cart.products.all()]
@@ -163,6 +163,6 @@ def page_not_found(request, exception):
 
 # TODO 
 # тесты  и сделать docker
-# потом drf requirements debug toolbar slecet prefetch related cache
+# потом drf requirements 
 # после оптимизации видео
 # TODO env settings и sec key
