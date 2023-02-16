@@ -21,16 +21,13 @@ class HomeView(ListView):
         return context
 
 
-class ProductView(DetailView):
+class ProductView(TemplateView):
     template_name = 'product.html'
-    context_object_name = 'product'
-
-    def get_object(self):
-        return get_object_or_404(Products,product_code=self.kwargs['product_code'])
 
     def get_context_data(self, **kwargs) -> dict[str, any]:
         context = super().get_context_data(**kwargs)
-        context["title"] = self.get_object().name
+        context['product'] = get_object_or_404(Products,product_code=self.kwargs['product_code'])
+        context['title'] = context['product'].name
         return context
 
 
