@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, View, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegistrationForm, FeedbackForm
-from .models import Products, CartModel, OrderModel, UserProfile
+from .models import *
 
 
 class HomeView(ListView):
@@ -65,7 +65,7 @@ class LogoutView(View):
         return redirect('home')
 
 
-class CartView(LoginRequiredMixin, ListView):
+class CartView(LoginRequiredMixin, ListView):#TODO change to cojntext data
     template_name = 'cart.html'
     context_object_name = 'cart'
 
@@ -122,23 +122,21 @@ class OrderView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            order = OrderModel()
-            order.save()
             products = CartModel.objects.get(user=request.user).products.all()
-            order.products.set(products)
-            order.user = request.user
-            if not order.products.exists():
-                return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
+            order = OrderModel(user=request.user)
             order.save()
-            profile = UserProfile.objects.get(user=self.request.user)
-            profile.orders.add(order)
-        except:
-            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
-        finally:
+            order.products.set(products)
+            if not order.products.exists():
+                return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
+            order.save()
+
+            # Удаление купленных товаров из корзины
             cart = CartModel.objects.get(user=request.user)
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
-
+        except:
+            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
+         
         return HttpResponseRedirect(reverse_lazy('thanks'))
 
 

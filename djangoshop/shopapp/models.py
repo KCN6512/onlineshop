@@ -74,7 +74,6 @@ class CartModel(models.Model):
 class OrderModel(models.Model):
     def get_order_id():
         last_order = OrderModel.objects.all().last()
-        print(last_order, 'last order')
         if not last_order:
             return 1
         return last_order.id + 1
