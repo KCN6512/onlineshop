@@ -141,7 +141,8 @@ class ProfileView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['profile'] = UserProfile.objects.get(user=self.request.user)
+        profile = UserProfile.objects.get(user=self.request.user)
+        context['orders'] = profile.orders.all().prefetch_related('products', 'price_summary')
         context['title'] = 'Профиль'
         return context
 
@@ -159,3 +160,4 @@ def page_not_found(request, exception):
 # потом drf
 # после оптимизации видео
 # env settings и sec key
+# кешировать итоговую цену в заказах
