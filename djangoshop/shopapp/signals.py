@@ -11,12 +11,9 @@ def create_profile_and_cart(sender, instance, created, **kwargs):
         cart = CartModel.objects.create(user=instance)
         UserProfile.objects.create(user=instance, cart=cart)
 
-# # Добавление заказа в профиль
-# @receiver(post_save, sender=OrderModel)
-# def add_order_to_profile(sender, instance, created, **kwargs):
-#     if created:
-#         print(instance, 'instance')
-#         profile = UserProfile.objects.get(user=instance.user)
-#         print(instance.user, 'instance.user')
-#         print(profile, 'profile')
-#         profile.orders.add(instance)
+# Добавление заказа в профиль
+@receiver(post_save, sender=OrderModel)
+def add_order_to_profile(sender, instance, created, **kwargs):
+    if created:
+        profile = UserProfile.objects.get(user=instance.user)
+        profile.orders.add(instance)

@@ -79,7 +79,6 @@ class CartView(LoginRequiredMixin, ListView):#TODO change to cojntext data
 
         if self.get_queryset().products.exists():
             context['total_price'] = self.get_queryset().price_summary()
-
         return context
 
 
@@ -117,7 +116,6 @@ class OrderView(View):
 
         if not cart.products.exists():
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
-
         return render(request, 'order.html', context=context)
 
     def post(self, request, *args, **kwargs):
@@ -135,8 +133,7 @@ class OrderView(View):
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
         except:
-            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже</h1>')
-         
+            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже или свяжитесь с нами через форму обратной связи</h1>')
         return HttpResponseRedirect(reverse_lazy('thanks'))
 
 
