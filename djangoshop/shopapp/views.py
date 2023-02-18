@@ -15,7 +15,7 @@ class HomeView(ListView):
     context_object_name = 'products'
     paginate_by = 5
 
-    def get_context_data(self, **kwargs: any) -> dict[str, any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Домашняя страница магазина'
         return context
@@ -24,7 +24,7 @@ class HomeView(ListView):
 class ProductView(TemplateView):
     template_name = 'product.html'
 
-    def get_context_data(self, **kwargs) -> dict[str, any]:
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['product'] = get_object_or_404(Products,product_code=self.kwargs['product_code'])
         context['title'] = context['product'].name
@@ -106,7 +106,7 @@ class FeedbackView(CreateView):
         context['title'] = 'Обратная связь'
         return context
 
-#TODO несостоявшиеся заказа увеличивают номер заказа
+
 class OrderView(View):
 
     def get(self, request, *args, **kwargs):
@@ -133,7 +133,8 @@ class OrderView(View):
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
         except:
-            return HttpResponse('<h1>Произошла ошибка, попробуйте попозже или свяжитесь с нами через форму обратной связи</h1>')
+            return HttpResponse('''<h1>Произошла ошибка, попробуйте попозже
+            или свяжитесь с нами через форму обратной связи</h1>''')
         return HttpResponseRedirect(reverse_lazy('thanks'))
 
 
@@ -158,6 +159,6 @@ def page_not_found(request, exception):
 
 # TODO 
 # тесты  и сделать docker
-# потом drf requirements 
+# потом drf
 # после оптимизации видео
-# TODO env settings и sec key
+# env settings и sec key
