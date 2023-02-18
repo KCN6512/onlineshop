@@ -10,7 +10,8 @@ class Products(models.Model):
     validators=[MaxValueValidator(9999999)], verbose_name='Код продукта')
     description = models.TextField(verbose_name='Описание товара',
     default='Тестовое описание товара', blank=True)
-    price = models.DecimalField(max_digits=15, decimal_places=2, verbose_name='Цена за единицу')
+    price = models.DecimalField(max_digits=15, decimal_places=2, 
+                                verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='products')
     image = models.ImageField(null=True)
 
@@ -64,7 +65,7 @@ class CartModel(models.Model):
 
     def price_summary(self):
         price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
-        return f"{price}"
+        return price
 
     class Meta:
         verbose_name = 'Корзина'
@@ -84,10 +85,8 @@ class OrderModel(models.Model):
                                           verbose_name='Номер заказа')
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
-    
-    def price_summary(self):
-        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
-        return f"{price}"
+    total_price = models.DecimalField(max_digits=15, decimal_places=2, 
+                  verbose_name='Итоговая цена заказа', null=False)
 
     def __str__(self):
         return f'{self.user} {self.order_id } {self.date}'

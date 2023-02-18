@@ -117,8 +117,9 @@ class OrderView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            products = CartModel.objects.get(user=request.user).products.all()
-            order = OrderModel(user=request.user)
+            cart = CartModel.objects.get(user=request.user)
+            products = cart.products.all()
+            order = OrderModel(user=request.user, total_price=cart.price_summary())
             order.save()
             order.products.set(products)
             if not order.products.exists():
@@ -142,7 +143,7 @@ class ProfileView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         profile = UserProfile.objects.get(user=self.request.user)
-        context['orders'] = profile.orders.all().prefetch_related('products', 'price_summary')
+        context['orders'] = profile.orders.all().prefetch_related('products')
         context['title'] = 'Профиль'
         return context
 
@@ -158,6 +159,5 @@ def page_not_found(request, exception):
 # TODO 
 # тесты  и сделать docker
 # потом drf
-# после оптимизации видео
 # env settings и sec key
-# кешировать итоговую цену в заказах
+# кешировать заказы
