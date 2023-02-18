@@ -65,20 +65,17 @@ class LogoutView(View):
         return redirect('home')
 
 
-class CartView(LoginRequiredMixin, ListView):#TODO change to cojntext data
+class CartView(LoginRequiredMixin, TemplateView):#TODO change to cojntext data
     template_name = 'cart.html'
-    context_object_name = 'cart'
-
-    def get_queryset(self):
-        queryset = CartModel.objects.get(user=self.request.user)
-        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        cart = CartModel.objects.get(user=self.request.user)
         context['title'] = 'Корзина'
+        context['products'] = cart.products.all()
 
-        if self.get_queryset().products.exists():
-            context['total_price'] = self.get_queryset().price_summary()
+        if cart.products.exists():
+            context['total_price'] = cart.price_summary()
         return context
 
 
