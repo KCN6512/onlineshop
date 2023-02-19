@@ -171,6 +171,5 @@ def page_not_found(request, exception):
 
 
 # TODO 
-# тесты docker drf
-# env settings и sec key
+# тесты  drf
 # кешировать заказы 
