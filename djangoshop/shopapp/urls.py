@@ -1,6 +1,10 @@
 from django.urls import include, path
+from rest_framework import routers
 
 from .views import *
+
+router = routers.DefaultRouter()
+router.register(r'products', ProductsViewSet)
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
@@ -13,10 +17,12 @@ urlpatterns = [
     path('remove_product/<int:product_code>/', remove_product_from_cart_view, name='remove_product'),
     path('add_product/<int:product_code>/', add_product_to_cart_view, name='add_product'),
     path('cart/order/', OrderView.as_view(), name='order'),
-    path('profile', ProfileView.as_view(), name='profile'),
-    path('thanks', ThanksView.as_view(), name='thanks'),
-    path('__debug__/', include('debug_toolbar.urls')),
-    
+    path('profile/', ProfileView.as_view(), name='profile'),
+    path('thanks/', ThanksView.as_view(), name='thanks'),
+    path('__debug__/', include('debug_toolbar.urls')), #DebugToolBar
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')), # RESTAPI
+    path('api/v1/', include(router.urls)),
+
 ]
 
 handler404 = 'shopapp.views.page_not_found'

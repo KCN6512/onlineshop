@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shopapp.apps.ShopappConfig',
     'crispy_forms',
-
-    "debug_toolbar",
+    'rest_framework',
+    'debug_toolbar',
     
 ]
 

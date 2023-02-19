@@ -1,12 +1,15 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, View, TemplateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from .forms import UserRegistrationForm, FeedbackForm
+from django.views.generic import CreateView, ListView, TemplateView, View
+from rest_framework import viewsets
+
+from .forms import FeedbackForm, UserRegistrationForm
 from .models import *
+from .serializers import *
 
 
 class HomeView(ListView):
@@ -150,6 +153,16 @@ class ProfileView(TemplateView):
 
 class ThanksView(TemplateView):
     template_name = 'thanks.html'
+
+
+# rest framework
+
+
+class ProductsViewSet(viewsets.ModelViewSet):
+    queryset = Products.objects.all()
+    serializer_class = ProductsSerializer
+
+
 
 
 def page_not_found(request, exception):

@@ -1,8 +1,9 @@
-from django.db.models.signals import post_save
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .models import *
+
 
 # При регистрации пользователя создает ему корзину и профиль с заказами
 @receiver(post_save, sender=User)
