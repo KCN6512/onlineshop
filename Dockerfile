@@ -4,9 +4,7 @@ COPY requirements.txt /temp/requirements.txt
 RUN python -m pip install -U pip
 
 RUN apt-get update \ 
-    && apt-get -y install libpq-dev gcc \
-    && pip install psycopg2
-
+    && apt-get -y install libpq-dev gcc
 RUN pip install -r /temp/requirements.txt
 COPY djangoshop /djangoshop
 WORKDIR /djangoshop
