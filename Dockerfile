@@ -13,3 +13,5 @@ EXPOSE 8000
 RUN adduser --disabled-password djangoshop-user
 
 USER djangoshop-user
+
+#docker-compose run --rm djangoshop-app sh -c "python manage.py migrate"  
