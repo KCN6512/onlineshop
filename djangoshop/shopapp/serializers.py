@@ -19,8 +19,13 @@ class ProductsSerializer(serializers.ModelSerializer):
 
 class CartSerializer(serializers.ModelSerializer):
     #products = ProductsSerializer(many=True)
-    user = serializers.CharField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = CartModel
+        fields = '__all__'
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderModel
         fields = '__all__'

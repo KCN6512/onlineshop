@@ -161,14 +161,20 @@ class ThanksView(TemplateView):
 
 
 class ProductsViewSet(viewsets.ModelViewSet):
-    queryset = Products.objects.all()
+    queryset = Products.objects.all().prefetch_related('categories')
     serializer_class = ProductsSerializer
 
 
 class CartViewSet(viewsets.ModelViewSet):
-    queryset = CartModel.objects.all()
+    queryset = CartModel.objects.all().prefetch_related('products')
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# only cart owner can change it
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# only cart owner can update it
+
+
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = OrderModel.objects.all().prefetch_related('products')
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
 
 
 def page_not_found(request, exception):

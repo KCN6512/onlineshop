@@ -6,6 +6,7 @@ from .views import *
 router = routers.DefaultRouter()
 router.register(r'products', ProductsViewSet, basename='products')
 router.register(r'cart', CartViewSet, basename='cart')
+router.register(r'orders', OrderViewSet, basename='orders')
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
