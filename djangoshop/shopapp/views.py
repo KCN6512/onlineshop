@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.db import transaction
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -120,7 +121,8 @@ class OrderView(LoginRequiredMixin, View):
         if not cart.products.exists():
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
         return render(request, 'order.html', context=context)
-
+        
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
             cart = CartModel.objects.prefetch_related('products').get(user=request.user)
@@ -182,3 +184,4 @@ def page_not_found(request, exception):
 # TODO 
 # тесты 
 # кешировать заказы 
+# в app drf
