@@ -72,6 +72,7 @@ class LogoutView(View):
 
 class CartView(LoginRequiredMixin, TemplateView):
     template_name = 'cart.html'
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -109,8 +110,8 @@ class FeedbackView(CreateView):
         return context
 
 
-class OrderView(View):
-
+class OrderView(LoginRequiredMixin, View):
+    login_url = reverse_lazy('login')
     def get(self, request, *args, **kwargs):
         cart = CartModel.objects.get(user=request.user)
         price = cart.price_summary() if cart.price_summary() else None
@@ -122,7 +123,7 @@ class OrderView(View):
 
     def post(self, request, *args, **kwargs):
         try:
-            cart = CartModel.objects.get(user=request.user)
+            cart = CartModel.objects.prefetch_related('products').get(user=request.user)
             products = cart.products.all()
             order = OrderModel(user=request.user, total_price=cart.price_summary())
             order.save()
@@ -132,7 +133,6 @@ class OrderView(View):
             order.save()
 
             # Удаление купленных товаров из корзины
-            cart = CartModel.objects.get(user=request.user)
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
         except:
@@ -182,4 +182,3 @@ def page_not_found(request, exception):
 # TODO 
 # тесты 
 # кешировать заказы 
-# авторизацию по токену
