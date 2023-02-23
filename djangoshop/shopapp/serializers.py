@@ -10,12 +10,17 @@ class CategoriesSerializer(serializers.ModelSerializer):
 
 
 class ProductsSerializer(serializers.ModelSerializer):
-    categories = CategoriesSerializer(many=True) #для полного вывода всех полей категории
-    request_user = serializers.CharField(default=serializers.CurrentUserDefault())
-        # Create a custom method field
+    #categories = CategoriesSerializer(many=True)
 
     class Meta:
         model = Products
         fields = '__all__'
-#все в виде api 
 
+
+class CartSerializer(serializers.ModelSerializer):
+    #products = ProductsSerializer(many=True)
+    user = serializers.CharField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = CartModel
+        fields = '__all__'

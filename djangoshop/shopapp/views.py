@@ -6,10 +6,12 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework import viewsets
+from rest_framework.permissions import *
 
 from .forms import FeedbackForm, UserRegistrationForm
 from .models import *
 from .serializers import *
+from .permissions import *
 
 
 class HomeView(ListView):
@@ -163,7 +165,10 @@ class ProductsViewSet(viewsets.ModelViewSet):
     serializer_class = ProductsSerializer
 
 
-
+class CartViewSet(viewsets.ModelViewSet):
+    queryset = CartModel.objects.all()
+    serializer_class = CartSerializer
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# only cart owner can change it
 
 
 def page_not_found(request, exception):
@@ -173,3 +178,4 @@ def page_not_found(request, exception):
 # TODO 
 # тесты  drf
 # кешировать заказы 
+# авторизацию по токену

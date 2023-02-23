@@ -4,7 +4,8 @@ from rest_framework import routers
 from .views import *
 
 router = routers.DefaultRouter()
-router.register(r'products', ProductsViewSet)
+router.register(r'products', ProductsViewSet, basename='products')
+router.register(r'cart', CartViewSet, basename='cart')
 
 urlpatterns = [
     path('', HomeView.as_view(), name='home'),
