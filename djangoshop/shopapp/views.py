@@ -10,8 +10,8 @@ from rest_framework.permissions import *
 
 from .forms import FeedbackForm, UserRegistrationForm
 from .models import *
-from .serializers import *
 from .permissions import *
+from .serializers import *
 
 
 class HomeView(ListView):
@@ -158,8 +158,6 @@ class ThanksView(TemplateView):
 
 
 # rest framework
-
-
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = Products.objects.all().prefetch_related('categories')
     serializer_class = ProductsSerializer
@@ -182,6 +180,6 @@ def page_not_found(request, exception):
 
 
 # TODO 
-# тесты  drf
+# тесты 
 # кешировать заказы 
 # авторизацию по токену
