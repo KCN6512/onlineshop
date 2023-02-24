@@ -163,6 +163,7 @@ class ThanksView(TemplateView):
 class ProductsViewSet(viewsets.ModelViewSet):
     queryset = Products.objects.all().prefetch_related('categories')
     serializer_class = ProductsSerializer
+    permission_classes = [DjangoModelPermissions]
 
 
 class CartViewSet(viewsets.ModelViewSet):
@@ -185,3 +186,4 @@ def page_not_found(request, exception):
 # тесты 
 # кешировать заказы 
 # в app drf
+# отдельынй api с post из post orderview
