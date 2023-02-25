@@ -176,7 +176,8 @@ class CartViewSet(viewsets.ModelViewSet):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderModel.objects.all().prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
+    queryset = OrderModel.objects.all().prefetch_related(Prefetch('products',
+                                        queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -185,8 +186,8 @@ def page_not_found(request, exception):
     return render(request, '404.html')
 
 
-# TODO 
-# тесты 
-# кешировать заказы 
+# TODO
+# тесты
+# кешировать заказы
 # в app drf
 # отдельынй api с post из post orderview #APIView где post копия post из order view нго без dry
