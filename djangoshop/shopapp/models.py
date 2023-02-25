@@ -82,7 +82,7 @@ class OrderModel(models.Model):
     user = models.ForeignKey(User, verbose_name='покупатель',
     on_delete=models.CASCADE, blank=False, null=True)
     order_id = models.PositiveIntegerField(unique=True, default=get_order_id,
-                                          verbose_name='Номер заказа')
+                                           verbose_name='Номер заказа')
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
     date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
     total_price = models.DecimalField(max_digits=15, decimal_places=2, 

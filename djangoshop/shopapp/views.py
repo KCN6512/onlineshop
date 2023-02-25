@@ -2,6 +2,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.db import transaction
+from django.db.models import Prefetch
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -113,6 +114,7 @@ class FeedbackView(CreateView):
 
 class OrderView(LoginRequiredMixin, View):
     login_url = reverse_lazy('login')
+
     def get(self, request, *args, **kwargs):
         cart = CartModel.objects.get(user=request.user)
         price = cart.price_summary() if cart.price_summary() else None
@@ -143,7 +145,8 @@ class OrderView(LoginRequiredMixin, View):
         return HttpResponseRedirect(reverse_lazy('thanks'))
 
 
-class ProfileView(TemplateView):
+class ProfileView(LoginRequiredMixin, TemplateView):
+    login_url = reverse_lazy('login')
     template_name = 'profile.html'
     context_object_name = 'profile'
 
@@ -169,11 +172,11 @@ class ProductsViewSet(viewsets.ModelViewSet):
 class CartViewSet(viewsets.ModelViewSet):
     queryset = CartModel.objects.all().prefetch_related('products')
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# only cart owner can update it
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderModel.objects.all().prefetch_related('products')
+    queryset = OrderModel.objects.all().prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -186,4 +189,4 @@ def page_not_found(request, exception):
 # тесты 
 # кешировать заказы 
 # в app drf
-# отдельынй api с post из post orderview
+# отдельынй api с post из post orderview #APIView где post копия post из order view нго без dry
