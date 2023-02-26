@@ -1,13 +1,13 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.db import transaction
-from django.db.models import Prefetch
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework import viewsets
+from rest_framework.generics import *
+from rest_framework.mixins import *
 from rest_framework.permissions import *
 
 from .forms import FeedbackForm, UserRegistrationForm
@@ -168,7 +168,9 @@ class ProductsViewSet(viewsets.ModelViewSet):
     permission_classes = [DjangoModelPermissions]
 
 
-class CartViewSet(viewsets.ModelViewSet):
+class CartViewSet(viewsets.GenericViewSet,
+                   mixins.RetrieveModelMixin,
+                   mixins.UpdateModelMixin):
     queryset = CartModel.objects.all().prefetch_related('products')
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
