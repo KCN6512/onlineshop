@@ -123,8 +123,7 @@ class OrderView(LoginRequiredMixin, View):
         if not cart.products.exists():
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
         return render(request, 'order.html', context=context)
-        
-    @transaction.atomic
+
     def post(self, request, *args, **kwargs):
         try:
             cart = CartModel.objects.prefetch_related('products').get(user=request.user)
@@ -176,8 +175,8 @@ class CartViewSet(viewsets.ModelViewSet):
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderModel.objects.all().prefetch_related(Prefetch('products',
-                                        queryset=Products.objects.all().only('id')))
+    queryset = OrderModel.objects.all().prefetch_related('products', 'products__categories') #.prefetch_related(Prefetch('products',
+                                        # queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -189,5 +188,4 @@ def page_not_found(request, exception):
 # TODO
 # тесты
 # кешировать заказы
-# в app drf
 # отдельынй api с post из post orderview #APIView где post копия post из order view нго без dry
