@@ -1,6 +1,7 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.db.models import *
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -177,11 +178,10 @@ class CartViewSet(viewsets.GenericViewSet,
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderModel.objects.all().prefetch_related('products', 'products__categories') #.prefetch_related(Prefetch('products',
-                                        # queryset=Products.objects.all().only('id')))
+    queryset = OrderModel.objects.all().prefetch_related('products').annotate(
+        annotated_price=Sum('products__price'))#.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
-
 
 def page_not_found(request, exception):
     return render(request, '404.html')
