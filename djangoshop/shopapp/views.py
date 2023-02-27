@@ -177,12 +177,16 @@ class CartViewSet(viewsets.GenericViewSet,
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSet(viewsets.GenericViewSet,
+                   mixins.RetrieveModelMixin,
+                   mixins.ListModelMixin):
     queryset = OrderModel.objects.all().prefetch_related('products')#.annotate(
         #annotated_price=Sum('products__price'))#.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
-
+    # def get_queryset(self):
+    #     print(self.kwargs)
+    #     return OrderModel.objects.filter(user=self.request.user)
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = super().list(request, *args, **kwargs)
@@ -199,3 +203,4 @@ def page_not_found(request, exception):
 # TODO
 # тесты
 # кешировать заказы
+# pep8 linter
