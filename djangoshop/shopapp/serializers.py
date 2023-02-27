@@ -22,14 +22,10 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class OrderSerializer(serializers.ModelSerializer):
-    total_price_method_field = serializers.SerializerMethodField()
+    # total_price_method_field = serializers.SerializerMethodField()
 
-    def get_total_price_method_field(self, instance):
-        return instance.annotated_price # берется из annotate
-
-    # def create(self, validated_data):
-    #     validated_data['total_price'] = 123
-    #     return super(OrderSerializer, self).create(validated_data)
+    # def get_total_price_method_field(self, instance):
+    #     return instance.annotated_price # берется из annotate
 
     class Meta:
         model = OrderModel

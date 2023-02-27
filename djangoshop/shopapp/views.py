@@ -178,10 +178,19 @@ class CartViewSet(viewsets.GenericViewSet,
 
 
 class OrderViewSet(viewsets.ModelViewSet):
-    queryset = OrderModel.objects.all().prefetch_related('products').annotate(
-        annotated_price=Sum('products__price'))#.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
+    queryset = OrderModel.objects.all().prefetch_related('products')#.annotate(
+        #annotated_price=Sum('products__price'))#.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        response = super().list(request, *args, **kwargs)
+
+        response_data = {'result': response.data}
+        response_data['total_amount'] = queryset.aggregate(total=Sum('total_price'))
+        response.data = response_data
+        return response
 
 def page_not_found(request, exception):
     return render(request, '404.html')
@@ -190,4 +199,3 @@ def page_not_found(request, exception):
 # TODO
 # тесты
 # кешировать заказы
-# отдельынй api с post из post orderview #APIView где post копия post из order view нго без dry
