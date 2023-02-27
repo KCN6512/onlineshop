@@ -17,3 +17,4 @@ tomli==2.0.1
 typing_extensions==4.4.0
 tzdata==2022.5
 celery[redis]==5.2.7
+flower==1.2.0
