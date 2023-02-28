@@ -129,18 +129,18 @@ class OrderView(LoginRequiredMixin, View):
         try:
             cart = CartModel.objects.prefetch_related('products').get(user=request.user)
             products = cart.products.all()
-            order = OrderModel(user=request.user, total_price=cart.price_summary())
+            order = OrderModel(user=request.user, total_price=0)
             order.save()
             order.products.set(products)
+            order.total_price=order.price_summary()
             if not order.products.exists():
                 return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
             order.save()
-
             # Удаление купленных товаров из корзины
             items_to_remove = [i for i in cart.products.all()]
             cart.products.remove(*items_to_remove)
         except:
-            return HttpResponse('''<h1>Произошла ошибка, попробуйте попозже
+            return HttpResponse('''<h1>Произошла ошибка, попробуйте позже
             или свяжитесь с нами через форму обратной связи</h1>''')
         return HttpResponseRedirect(reverse_lazy('thanks'))
 
@@ -179,22 +179,25 @@ class CartViewSet(viewsets.GenericViewSet,
 
 class OrderViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
-                   mixins.ListModelMixin):
-    queryset = OrderModel.objects.all().prefetch_related('products')#.annotate(
-        #annotated_price=Sum('products__price'))#.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
+                   mixins.ListModelMixin,
+                   mixins.CreateModelMixin):
+    queryset = OrderModel.objects.all().prefetch_related('products')#.prefetch_related(Prefetch(
+        # 'products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
-    # def get_queryset(self):
-    #     print(self.kwargs)
-    #     return OrderModel.objects.filter(user=self.request.user)
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = super().list(request, *args, **kwargs)
-
         response_data = {'result': response.data}
         response_data['total_amount'] = queryset.aggregate(total=Sum('total_price'))
         response.data = response_data
         return response
+
+    def perform_create(self, serializer):
+        serializer = serializer.save(user=self.request.user, total_price=0)
+        serializer.total_price = serializer.products.all().aggregate(models.Sum('price')).get('price__sum')
+        return super().perform_create(serializer)
 
 def page_not_found(request, exception):
     return render(request, '404.html')
@@ -204,3 +207,8 @@ def page_not_found(request, exception):
 # тесты
 # кешировать заказы
 # pep8 linter
+# git actions 
+# {
+#     "user": {"admin":1},
+#     "products": [2]
+# }

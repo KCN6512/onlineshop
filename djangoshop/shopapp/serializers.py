@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 from .models import *
 
@@ -21,12 +22,17 @@ class CartSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    # total_price_method_field = serializers.SerializerMethodField()
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id',)
 
-    # def get_total_price_method_field(self, instance):
-    #     return instance.annotated_price # берется из annotate
+
+class OrderSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
 
     class Meta:
         model = OrderModel
         fields = '__all__'
+        extra_kwargs = {'total_price': {'required':False, 'read_only': True},
+                        'order_id':{'required':False, 'read_only': True}}
