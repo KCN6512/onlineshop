@@ -180,9 +180,12 @@ class CartViewSet(viewsets.GenericViewSet,
 
     @action(detail=False)
     def recent_users(self, request):
-        print(request.data)
-        print('asd')
-        return Response({'a':'b'})
+        print(request.body)
+        print(request.GET)
+        print(request.POST)
+        print(request.headers.get('Authorization'))
+        serializer = self.serializer_class(self.queryset.get(user=request.user))
+        return Response(serializer.data)
 
 
 class OrderViewSet(viewsets.GenericViewSet,
