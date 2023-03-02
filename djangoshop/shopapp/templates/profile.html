@@ -8,7 +8,7 @@
             <h4>Номер заказа: {{ order.order_id }}</h4>
             <h4>Дата заказа: {{ order.date }}</h4>
           <h6 class="card-title">Товары: {{ order.products.all|join:',' }}</h5>
-          <h5 class="card-title">Цена : {{ order.total_price|floatformat }} рублей </h5> 
+          <h5 class="card-title">Итого : {{ order.total_price|floatformat }} рублей </h5> 
         </div>
       </div>
     {% endfor %}

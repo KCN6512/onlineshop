@@ -10,6 +10,7 @@ from rest_framework import viewsets
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
+from rest_framework.decorators import action
 
 from .forms import FeedbackForm, UserRegistrationForm
 from .models import *
@@ -171,18 +172,25 @@ class ProductsViewSet(viewsets.ModelViewSet):
 
 class CartViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin):
+                   mixins.UpdateModelMixin,
+                   mixins.ListModelMixin):
     queryset = CartModel.objects.all().prefetch_related('products')
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
+
+    @action(detail=False)
+    def recent_users(self, request):
+        print(request.data)
+        print('asd')
+        return Response({'a':'b'})
 
 
 class OrderViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    mixins.CreateModelMixin):
-    queryset = OrderModel.objects.all().prefetch_related('products')#.prefetch_related(Prefetch(
-        # 'products', queryset=Products.objects.all().only('id')))
+    queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
+    #.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -204,11 +212,8 @@ def page_not_found(request, exception):
 
 
 # TODO
-# тесты
+# тесты code coverage %
 # кешировать заказы
 # pep8 linter
 # git actions 
-# {
-#     "user": {"admin":1},
-#     "products": [2]
-# }
+# аутенфикация
