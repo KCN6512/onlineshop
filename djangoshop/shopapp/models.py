@@ -91,6 +91,10 @@ class OrderModel(models.Model):
     def __str__(self):
         return f'{self.user} {self.order_id } {self.date}'
 
+    def price_summary(self):
+        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
+        return price
+
     class Meta:
         verbose_name = 'Заказ'
         verbose_name_plural = 'Заказы'

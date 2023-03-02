@@ -133,9 +133,9 @@ class OrderView(LoginRequiredMixin, View):
             order = OrderModel(user=request.user, total_price=0)
             order.save()
             order.products.set(products)
-            order.total_price=order.price_summary()
             if not order.products.exists():
                 return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
+            order.total_price=order.price_summary()
             order.save()
             # Удаление купленных товаров из корзины
             items_to_remove = [i for i in cart.products.all()]
@@ -174,7 +174,7 @@ class CartViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin,
                    mixins.ListModelMixin):
-    queryset = CartModel.objects.all().prefetch_related('products')
+    queryset = CartModel.objects.all().prefetch_related('products').select_related('user')
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
 
@@ -209,4 +209,4 @@ def page_not_found(request, exception):
 # тесты code coverage %
 # кешировать заказы
 # pep8 linter
-# git actions 
+# git actions тесты
