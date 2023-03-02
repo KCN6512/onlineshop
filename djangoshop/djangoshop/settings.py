@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'shopapp.apps.ShopappConfig',
     'crispy_forms',
     'rest_framework',
+    'rest_framework.authtoken',
+    'djoser',
     'debug_toolbar',
     
 ]
@@ -175,3 +177,13 @@ INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
 
 #Celery
 CELERY_BROKER_URL = 'redis://redis:6379/0'
+
+#Rest
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

@@ -216,4 +216,3 @@ def page_not_found(request, exception):
 # кешировать заказы
 # pep8 linter
 # git actions 
-# аутенфикация
