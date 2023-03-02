@@ -121,6 +121,7 @@ class OrderView(LoginRequiredMixin, View):
         cart = CartModel.objects.get(user=request.user)
         price = cart.price_summary() if cart.price_summary() else None
         context = {'price': price}
+        context['title'] = 'Заказ'
 
         if not cart.products.exists():
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')

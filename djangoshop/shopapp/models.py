@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
 from django.urls import reverse
-
+from .mixins import *
 
 class Products(models.Model):
     name = models.CharField(max_length=128, verbose_name='Название')
@@ -55,7 +55,7 @@ class FeedbackModel(models.Model):
         verbose_name_plural = 'Обратная связь'
 
 
-class CartModel(models.Model):
+class CartModel(models.Model, PriceSummaryMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE,
                                verbose_name='Пользователь')
     products = models.ManyToManyField(Products, verbose_name='Товары')
@@ -63,16 +63,12 @@ class CartModel(models.Model):
     def __str__(self):
         return f'{self.user.username} "корзина"'
 
-    def price_summary(self):
-        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
-        return price
-
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
 
 
-class OrderModel(models.Model):
+class OrderModel(models.Model, PriceSummaryMixin):
     def get_order_id():
         last_order = OrderModel.objects.all().last()
         if not last_order:
@@ -90,10 +86,6 @@ class OrderModel(models.Model):
 
     def __str__(self):
         return f'{self.user} {self.order_id } {self.date}'
-
-    def price_summary(self):
-        price = self.products.all().aggregate(models.Sum('price')).get('price__sum')
-        return price
 
     class Meta:
         verbose_name = 'Заказ'
