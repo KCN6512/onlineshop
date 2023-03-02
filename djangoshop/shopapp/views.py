@@ -178,15 +178,6 @@ class CartViewSet(viewsets.GenericViewSet,
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
 
-    @action(detail=False)
-    def recent_users(self, request):
-        print(request.body)
-        print(request.GET)
-        print(request.POST)
-        print(request.headers.get('Authorization'))
-        serializer = self.serializer_class(self.queryset.get(user=request.user))
-        return Response(serializer.data)
-
 
 class OrderViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
