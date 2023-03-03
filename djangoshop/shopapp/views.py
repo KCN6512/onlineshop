@@ -10,7 +10,6 @@ from rest_framework import viewsets
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
-from rest_framework.decorators import action
 
 from .forms import FeedbackForm, UserRegistrationForm
 from .models import *
@@ -43,7 +42,7 @@ class ProductView(TemplateView):
 class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register.html'
-    success_url = reverse_lazy('login') #reverse_lazy нужен для классов вьюшек
+    success_url = reverse_lazy('login_view') #reverse_lazy нужен для классов вьюшек
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -76,7 +75,7 @@ class LogoutView(View):
 
 class CartView(LoginRequiredMixin, TemplateView):
     template_name = 'cart.html'
-    login_url = reverse_lazy('login')
+    login_url = reverse_lazy('login_view')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,7 +114,7 @@ class FeedbackView(CreateView):
 
 
 class OrderView(LoginRequiredMixin, View):
-    login_url = reverse_lazy('login')
+    login_url = reverse_lazy('login_view')
 
     def get(self, request, *args, **kwargs):
         cart = CartModel.objects.get(user=request.user)
@@ -148,7 +147,7 @@ class OrderView(LoginRequiredMixin, View):
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
-    login_url = reverse_lazy('login')
+    login_url = reverse_lazy('login_view')
     template_name = 'profile.html'
     context_object_name = 'profile'
 
@@ -177,7 +176,7 @@ class CartViewSet(viewsets.GenericViewSet,
                    mixins.ListModelMixin):
     queryset = CartModel.objects.all().prefetch_related('products').select_related('user')
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]# cart owner only can update it
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
 
 class OrderViewSet(viewsets.GenericViewSet,
@@ -199,7 +198,8 @@ class OrderViewSet(viewsets.GenericViewSet,
 
     def perform_create(self, serializer):
         serializer = serializer.save(user=self.request.user, total_price=0)
-        serializer.total_price = serializer.products.all().aggregate(models.Sum('price')).get('price__sum')
+        serializer.total_price = serializer.products.all().aggregate(
+                                 models.Sum('price')).get('price__sum')
         return super().perform_create(serializer)
 
 def page_not_found(request, exception):

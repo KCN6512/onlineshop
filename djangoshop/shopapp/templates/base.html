@@ -28,14 +28,14 @@
                 <a class="nav-link text-dark" href="{% url 'register' %}">Регистрация</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'login' %}">Вход</a>
+                <a class="nav-link text-dark" href="{% url 'login_view' %}">Вход</a>
               </li>
               {% else %}
               <li class="nav-item">
                 <a href="{% url 'profile' %}" class="btn btn-success">{{ user.username }}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link text-dark" href="{% url 'logout' %}">Выйти</a>
+                <a class="nav-link text-dark" href="{% url 'logout_view' %}">Выйти</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link btn btn-primary" href="{% url 'cart' %}">Корзина</a>
