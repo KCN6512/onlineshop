@@ -16,7 +16,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2, 
                                 verbose_name='Цена за единицу')
     categories = models.ManyToManyField('Categories', related_name='products')
-    image = models.ImageField(null=True)
+    image = models.ImageField(null=True, upload_to='%Y/%d/%m/')
 
     def __str__(self):
         return f'{self.name}'

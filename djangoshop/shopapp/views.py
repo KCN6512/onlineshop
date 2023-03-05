@@ -84,7 +84,7 @@ class CartView(LoginRequiredMixin, TemplateView):
 
         if cart.products.exists():
             context['products'] = cart.products.all()
-            context['total_price'] = cart.price_summary()
+            context['total_price'] = cart.price_summary() if cart.price_summary() else None
         return context
 
 
@@ -211,3 +211,4 @@ def page_not_found(request, exception):
 # кешировать заказы
 # pep8 linter
 # git actions тесты
+# перенести в модели логику
