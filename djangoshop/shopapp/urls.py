@@ -1,5 +1,4 @@
 from django.urls import include, path
-from rest_framework import routers
 
 from .views import *
 
@@ -16,7 +15,6 @@ urlpatterns = [
     path('cart/order/', OrderView.as_view(), name='order'),
     path('profile/', ProfileView.as_view(), name='profile'),
     path('thanks/', ThanksView.as_view(), name='thanks'),
-    path('__debug__/', include('debug_toolbar.urls')), #DebugToolBar
 ]
 
 handler404 = 'shopapp.views.page_not_found'
