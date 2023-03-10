@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shopapp.apps.ShopappConfig',
+    'ShopAPI.apps.ShopapiConfig',
     'crispy_forms',
     'rest_framework',
     'rest_framework.authtoken',

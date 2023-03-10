@@ -2,7 +2,7 @@ from django.urls import include, path, re_path
 from rest_framework import routers
 
 from .views import *
-
+from ShopAPI.views import *
 router = routers.DefaultRouter()
 router.register(r'products', ProductsViewSet, basename='products')
 router.register(r'carts', CartViewSet, basename='carts')
