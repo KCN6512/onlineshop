@@ -2,9 +2,9 @@ from rest_framework import viewsets
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
-from djangoshop.shopapp.models import CartModel, OrderModel, Products
-from djangoshop.shopapp.permissions import IsOwnerOrReadOnly
-from djangoshop.shopapp.serializers import CartSerializer, OrderSerializer, ProductsSerializer
+from shopapp.models import CartModel, OrderModel, Products
+from shopapp.permissions import IsOwnerOrReadOnly
+from shopapp.serializers import CartSerializer, OrderSerializer, ProductsSerializer
 from django.db.models import *
 from django.http import HttpResponseRedirect
 
