@@ -202,6 +202,12 @@ class OrderViewSet(viewsets.GenericViewSet,
                                  models.Sum('price')).get('price__sum')
         return super().perform_create(serializer)
 
+    def create(self, request, *args, **kwargs):
+        response = super().create(request, *args, **kwargs)
+        return HttpResponseRedirect(str(response.data['id']))
+
+
+
 def page_not_found(request, exception):
     return render(request, '404.html')
 
