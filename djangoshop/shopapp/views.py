@@ -1,4 +1,5 @@
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, HttpResponseRedirect
@@ -81,6 +82,7 @@ class CartView(LoginRequiredMixin, TemplateView):
         return context
 
 
+@login_required
 def remove_product_from_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
@@ -88,6 +90,7 @@ def remove_product_from_cart_view(request, product_code):
     return HttpResponseRedirect(reverse_lazy('cart'))
 
 
+@login_required
 def add_product_to_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
@@ -166,4 +169,3 @@ def page_not_found(request, exception):
 # кешировать заказы
 # pep8 linter
 # git actions тесты
-# перенести в модели логику

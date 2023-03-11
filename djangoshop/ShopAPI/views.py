@@ -4,6 +4,7 @@ from rest_framework import viewsets
 from rest_framework.generics import *
 from rest_framework.mixins import *
 from rest_framework.permissions import *
+from rest_framework.reverse import reverse
 from shopapp.models import CartModel, OrderModel, Products
 from shopapp.permissions import IsOwnerOrReadOnly
 from shopapp.serializers import (CartSerializer, OrderSerializer,
@@ -11,6 +12,7 @@ from shopapp.serializers import (CartSerializer, OrderSerializer,
 
 
 class ProductsViewSet(viewsets.ModelViewSet):
+    '''Products viewset'''
     queryset = Products.objects.all().prefetch_related('categories')
     serializer_class = ProductsSerializer
     permission_classes = [DjangoModelPermissions]
@@ -20,6 +22,7 @@ class CartViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
                    mixins.UpdateModelMixin,
                    mixins.ListModelMixin):
+    '''Cart viewset'''
     queryset = CartModel.objects.all().prefetch_related('products').select_related('user')
     serializer_class = CartSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -29,6 +32,7 @@ class OrderViewSet(viewsets.GenericViewSet,
                    mixins.RetrieveModelMixin,
                    mixins.ListModelMixin,
                    mixins.CreateModelMixin):
+    '''Order viewset'''
     queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
     #.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
@@ -50,4 +54,5 @@ class OrderViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        return HttpResponseRedirect(str(response.data['id']))
+        #redirect to created order
+        return HttpResponseRedirect(reverse('orders-detail', request=request, args=[response.data['id']]))
