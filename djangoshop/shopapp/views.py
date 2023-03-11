@@ -159,7 +159,6 @@ class ThanksView(TemplateView):
     template_name = 'thanks.html'
 
 
-
 def page_not_found(request, exception):
     return render(request, '404.html')
 
@@ -167,5 +166,5 @@ def page_not_found(request, exception):
 # TODO
 # тесты code coverage %
 # кешировать заказы
-# pep8 linter
 # git actions тесты
+# flake8 djangoshop --append-config 123.flake8

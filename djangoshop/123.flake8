@@ -1,0 +1,15 @@
+[flake8]
+ignore = 
+    F405
+    E501
+
+exclude =
+    .git
+    __pycache__
+    docs/source/conf.py
+    old
+    build
+    dist
+    migrations
+    manage.py
+    settings.py
