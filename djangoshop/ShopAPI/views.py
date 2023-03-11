@@ -19,9 +19,9 @@ class ProductsViewSet(viewsets.ModelViewSet):
 
 
 class CartViewSet(viewsets.GenericViewSet,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.ListModelMixin):
+                  mixins.RetrieveModelMixin,
+                  mixins.UpdateModelMixin,
+                  mixins.ListModelMixin):
     '''Cart viewset'''
     queryset = CartModel.objects.all().prefetch_related('products').select_related('user')
     serializer_class = CartSerializer
@@ -34,7 +34,7 @@ class OrderViewSet(viewsets.GenericViewSet,
                    mixins.CreateModelMixin):
     '''Order viewset'''
     queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
-    #.prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
+    # .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -54,5 +54,5 @@ class OrderViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        #redirect to created order
+        # redirect to created order
         return HttpResponseRedirect(reverse('orders-detail', request=request, args=[response.data['id']]))

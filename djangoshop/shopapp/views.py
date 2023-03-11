@@ -28,7 +28,7 @@ class ProductView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['product'] = get_object_or_404(Products,product_code=self.kwargs['product_code'])
+        context['product'] = get_object_or_404(Products, product_code=self.kwargs['product_code'])
         context['title'] = context['product'].name
         return context
 
@@ -36,7 +36,7 @@ class ProductView(TemplateView):
 class UserRegistrationView(CreateView):
     form_class = UserRegistrationForm
     template_name = 'register.html'
-    success_url = reverse_lazy('login_view') #reverse_lazy нужен для классов вьюшек
+    success_url = reverse_lazy('login_view')  # reverse_lazy нужен для классов вьюшек
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -131,7 +131,7 @@ class OrderView(LoginRequiredMixin, View):
             order.products.set(products)
             if not order.products.exists():
                 return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
-            order.total_price=order.price_summary()
+            order.total_price = order.price_summary()
             order.save()
             # Удаление купленных товаров из корзины
             items_to_remove = [i for i in cart.products.all()]

@@ -8,6 +8,7 @@ from .models import *
 
 class UserRegistrationForm(UserCreationForm):
     email = forms.CharField(max_length=75, required=True, validators=[EmailValidator])
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password1', 'password2']

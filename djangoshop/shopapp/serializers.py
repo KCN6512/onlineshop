@@ -34,5 +34,5 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderModel
         fields = '__all__'
-        extra_kwargs = {'total_price': {'required':False, 'read_only': True},
-                        'order_id':{'required':False, 'read_only': True}}
+        extra_kwargs = {'total_price': {'required': False, 'read_only': True},
+                        'order_id': {'required': False, 'read_only': True}}

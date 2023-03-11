@@ -12,6 +12,7 @@ def create_profile_and_cart(sender, instance, created, **kwargs):
         cart = CartModel.objects.create(user=instance)
         UserProfile.objects.create(user=instance, cart=cart)
 
+
 # Добавление заказа в профиль
 @receiver(post_save, sender=OrderModel)
 def add_order_to_profile(sender, instance, created, **kwargs):
