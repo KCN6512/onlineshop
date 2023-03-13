@@ -12,6 +12,7 @@ from .models import *
 
 
 class HomeView(ListView):
+    ''' Home shop view '''
     template_name = 'home.html'
     queryset = Products.objects.all().prefetch_related('categories')
     context_object_name = 'products'
@@ -24,6 +25,7 @@ class HomeView(ListView):
 
 
 class ProductView(TemplateView):
+    ''' Detail product view '''
     template_name = 'product.html'
 
     def get_context_data(self, **kwargs):
@@ -34,6 +36,7 @@ class ProductView(TemplateView):
 
 
 class UserRegistrationView(CreateView):
+    ''' User registration view '''
     form_class = UserRegistrationForm
     template_name = 'register.html'
     success_url = reverse_lazy('login_view')  # reverse_lazy нужен для классов вьюшек
@@ -50,6 +53,7 @@ class UserRegistrationView(CreateView):
 
 
 class UserLoginView(LoginView):
+    ''' User login view '''
     template_name = 'login.html'
 
     def get_context_data(self, **kwargs):
@@ -62,12 +66,14 @@ class UserLoginView(LoginView):
 
 
 class LogoutView(View):
+    ''' User logout view '''
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect('home')
 
 
 class CartView(LoginRequiredMixin, TemplateView):
+    ''' CartView '''
     template_name = 'cart.html'
     login_url = reverse_lazy('login_view')
 
@@ -84,6 +90,7 @@ class CartView(LoginRequiredMixin, TemplateView):
 
 @login_required
 def remove_product_from_cart_view(request, product_code):
+    ''' Removing product from cart view '''
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
     cart.products.remove(product)
@@ -92,6 +99,7 @@ def remove_product_from_cart_view(request, product_code):
 
 @login_required
 def add_product_to_cart_view(request, product_code):
+    ''' Adding product from cart view '''
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
     cart.products.add(product)
@@ -99,6 +107,7 @@ def add_product_to_cart_view(request, product_code):
 
 
 class FeedbackView(CreateView):
+    ''' Feedback view '''
     form_class = FeedbackForm
     template_name = 'feedback.html'
     success_url = reverse_lazy('home')
@@ -110,6 +119,7 @@ class FeedbackView(CreateView):
 
 
 class OrderView(LoginRequiredMixin, View):
+    ''' Order view '''
     login_url = reverse_lazy('login_view')
 
     def get(self, request, *args, **kwargs):
@@ -143,6 +153,7 @@ class OrderView(LoginRequiredMixin, View):
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
+    ''' Profile view '''
     login_url = reverse_lazy('login_view')
     template_name = 'profile.html'
     context_object_name = 'profile'
@@ -156,6 +167,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 
 class ThanksView(TemplateView):
+    ''' Thanks for purchase view '''
     template_name = 'thanks.html'
 
 
