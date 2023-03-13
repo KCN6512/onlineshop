@@ -166,5 +166,3 @@ def page_not_found(request, exception):
 # TODO
 # тесты code coverage %
 # кешировать заказы
-# git actions тесты
-# flake8 djangoshop --append-config 123.flake8
