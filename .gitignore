@@ -134,4 +134,5 @@ dmypy.json
 #media
 djangoshop/media
 
+123.flake8
 .flake8
