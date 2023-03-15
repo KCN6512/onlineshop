@@ -19,3 +19,5 @@ def add_order_to_profile(sender, instance, created, **kwargs):
     if created:
         profile = UserProfile.objects.get(user=instance.user)
         profile.orders.add(instance)
+    # else:
+    # send_emailinstance.total_price
