@@ -2,10 +2,9 @@
 
 import django.core.validators
 import django.db.models.deletion
+import shopapp.models
 from django.conf import settings
 from django.db import migrations, models
-
-import shopapp.models
 
 
 class Migration(migrations.Migration):

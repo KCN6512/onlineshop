@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, RegexValidator
 from django.db import models
+from django.http import HttpResponse
 from django.urls import reverse
 
 from .mixins import *
@@ -78,6 +79,20 @@ class OrderModel(models.Model, PriceSummaryMixin):
         if not last_order:
             return 1
         return last_order.id + 1
+    
+    def create_order(request):
+        cart = CartModel.objects.prefetch_related('products').get(user=request.user)
+        products = cart.products.all()
+        order = OrderModel(user=request.user, total_price=0)
+        order.save()
+        order.products.set(products)
+        if not order.products.exists():
+            return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
+        order.total_price = order.price_summary()
+        order.save()
+        # Удаление купленных товаров из корзины
+        items_to_remove = [i for i in cart.products.all()]
+        cart.products.remove(*items_to_remove)
 
     user = models.ForeignKey(User, verbose_name='покупатель',
                              on_delete=models.CASCADE, blank=False,

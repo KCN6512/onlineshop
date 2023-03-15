@@ -134,18 +134,7 @@ class OrderView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         try:
-            cart = CartModel.objects.prefetch_related('products').get(user=request.user)
-            products = cart.products.all()
-            order = OrderModel(user=request.user, total_price=0)
-            order.save()
-            order.products.set(products)
-            if not order.products.exists():
-                return HttpResponse('<h1>Заказ пуст, продолжение невозможно</h1>')
-            order.total_price = order.price_summary()
-            order.save()
-            # Удаление купленных товаров из корзины
-            items_to_remove = [i for i in cart.products.all()]
-            cart.products.remove(*items_to_remove)
+            OrderModel.create_order(request)
         except:
             return HttpResponse('''<h1>Произошла ошибка, попробуйте позже
             или свяжитесь с нами через форму обратной связи</h1>''')
