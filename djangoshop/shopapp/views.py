@@ -2,7 +2,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
@@ -94,7 +94,7 @@ def remove_product_from_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
     cart.products.remove(product)
-    return HttpResponseRedirect(reverse_lazy('cart'))
+    return redirect('cart')
 
 
 @login_required
@@ -103,7 +103,7 @@ def add_product_to_cart_view(request, product_code):
     product = get_object_or_404(Products, product_code=product_code)
     cart = get_object_or_404(CartModel, user=request.user)
     cart.products.add(product)
-    return HttpResponseRedirect(reverse_lazy('cart'))
+    return redirect('cart')
 
 
 class FeedbackView(CreateView):
@@ -138,7 +138,7 @@ class OrderView(LoginRequiredMixin, View):
         except:
             return HttpResponse('''<h1>Произошла ошибка, попробуйте позже
             или свяжитесь с нами через форму обратной связи</h1>''')
-        return HttpResponseRedirect(reverse_lazy('thanks'))
+        return redirect('thanks')
 
 
 class ProfileView(LoginRequiredMixin, TemplateView):
@@ -167,3 +167,4 @@ def page_not_found(request, exception):
 # TODO
 # тесты code coverage %
 # кешировать заказы
+# send email signal celery
