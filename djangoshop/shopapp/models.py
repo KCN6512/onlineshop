@@ -36,9 +36,6 @@ class Categories(models.Model):
     def __str__(self):
         return f'{self.name}'
 
-    def get_absolute_url(self):
-        return reverse("product_category", kwargs={"category_name": self.name})
-
     class Meta:
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
@@ -117,6 +114,9 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return f'{self.user} профиль'
+
+    def get_absolute_url(self):
+        return reverse("product_category", kwargs={"category_name": self.name})
 
     class Meta:
         verbose_name = 'Профиль пользователя'
