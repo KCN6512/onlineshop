@@ -29,7 +29,8 @@ class ShopAppTestCase(TestCase):
         self.feedback = FeedbackModel.objects.create(name='Александр', text=self.FEEDBACK_TEXT, phone_number=+2131234578)
 
         # user
-        self.user = User.objects.create_user(username='admin', email='troshiy2011@mail.ru', password='admin', is_staff=True)
+        self.admin_user = User.objects.create_user(username='admin', email='troshiy2011@mail.ru', password='admin', is_staff=True)
+        self.user = User.objects.create_user(username='Alexander', email='troshiy2013@yandex.ru', password='123456', is_staff=False)
         return super().setUp()
 
     def test_products_model(self):
@@ -52,5 +53,15 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.feedback.text, self.FEEDBACK_TEXT)
         self.assertEqual(self.feedback.phone_number, 2131234578)
 
+    def test_admin_user(self):
+        self.assertEqual(self.admin_user.username, 'admin')
+        self.assertEqual(self.admin_user.is_staff, True)
+        self.assertEqual(self.admin_user.email, 'troshiy2011@mail.ru')
+
     def test_user(self):
-        print(self.user)
+        self.assertEqual(self.user.username, 'Alexander')
+        self.assertEqual(self.user.is_staff, False)
+        self.assertEqual(self.user.email, 'troshiy2013@yandex.ru')
+        self.assertEqual(self.user.userprofile.user.username, self.user.username)
+
+#cart order
