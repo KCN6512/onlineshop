@@ -8,15 +8,13 @@ from .mixins import *
 
 
 class Products(models.Model):
-    name = models.CharField(max_length=128, verbose_name='Название')
-    product_code = models.PositiveIntegerField(unique=True,
-                                               validators=[MaxValueValidator(9999999)],
-                                               verbose_name='Код продукта')
-    description = models.TextField(verbose_name='Описание товара',
+    name = models.CharField('Название', max_length=128)
+    product_code = models.PositiveIntegerField('Код продукта', unique=True,
+                                               validators=[MaxValueValidator(9999999)])
+    description = models.TextField('Описание товара',
                                    default='Тестовое описание товара',
                                    blank=True)
-    price = models.DecimalField(max_digits=10, decimal_places=2,
-                                verbose_name='Цена за единицу')
+    price = models.DecimalField('Цена за единицу', max_digits=10, decimal_places=2)
     categories = models.ManyToManyField('Categories', related_name='products')
     image = models.ImageField(null=True, upload_to='%Y/%d/%m/')
 
@@ -33,7 +31,7 @@ class Products(models.Model):
 
 
 class Categories(models.Model):
-    name = models.CharField(max_length=20, verbose_name='Название категории')
+    name = models.CharField('Название категории', max_length=20)
 
     def __str__(self):
         return f'{self.name}'
@@ -47,9 +45,9 @@ class Categories(models.Model):
 
 
 class FeedbackModel(models.Model):
-    name = models.CharField(max_length=20, verbose_name='Ваше имя')
+    name = models.CharField('Ваше имя', max_length=20)
     text = models.TextField(verbose_name='Ваше сообщение')
-    phone_number = models.CharField(max_length=12, verbose_name='Ваш телефонный номер',
+    phone_number = models.CharField('Ваш телефонный номер', max_length=12,
                                     validators=[RegexValidator(regex=r'^\+?1?\d{9,11}$')])
 
     def __str__(self) -> str:
@@ -97,12 +95,10 @@ class OrderModel(models.Model, PriceSummaryMixin):
     user = models.ForeignKey(User, verbose_name='покупатель',
                              on_delete=models.CASCADE, blank=False,
                              null=True)
-    order_id = models.PositiveIntegerField(unique=True, default=get_order_id,
-                                           verbose_name='Номер заказа')
+    order_id = models.PositiveIntegerField('Номер заказа', unique=True, default=get_order_id)
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
-    date = models.DateTimeField(auto_now=True, verbose_name='Дата заказа')
-    total_price = models.DecimalField(max_digits=15, decimal_places=2,
-                                      verbose_name='Итоговая цена заказа',
+    date = models.DateTimeField('Дата заказа', auto_now=True)
+    total_price = models.DecimalField('Итоговая цена заказа', max_digits=15, decimal_places=2,
                                       null=False)
 
     def __str__(self):

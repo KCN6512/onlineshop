@@ -166,5 +166,3 @@ def page_not_found(request, exception):
 
 # TODO
 # тесты code coverage %
-# кешировать заказы
-# send email signal celery
