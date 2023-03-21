@@ -1,11 +1,15 @@
+from django.contrib.auth.models import User
 from django.test import TestCase
-from shopapp.models import CartModel, OrderModel, Products, Categories, FeedbackModel
+from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
+                            Products, UserProfile)
 from shopapp.permissions import IsOwnerOrReadOnly
 from shopapp.serializers import (CartSerializer, OrderSerializer,
                                  ProductsSerializer)
-from django.contrib.auth.models import User
+
+
 # python manage.py test
 # docker compose exec djangoshop-app python manage.py test
+# docker compose exec djangoshop-app python manage.py test shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 class ShopAppTestCase(TestCase):
     def setUp(self) -> None:
         # products
@@ -31,7 +35,15 @@ class ShopAppTestCase(TestCase):
         # user
         self.admin_user = User.objects.create_user(username='admin', email='troshiy2011@mail.ru', password='admin', is_staff=True)
         self.user = User.objects.create_user(username='Alexander', email='troshiy2013@yandex.ru', password='123456', is_staff=False)
+        
+        # cart
+        self.cart = CartModel.objects.get(user=self.user)
+
+        # order
+        
+
         return super().setUp()
+
 
     def test_products_model(self):
         self.assertEqual(self.product.get_absolute_url(), f'/product/{self.product.product_code}/')
@@ -64,4 +76,25 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.user.email, 'troshiy2013@yandex.ru')
         self.assertEqual(self.user.userprofile.user.username, self.user.username)
 
-#cart order
+    def test_user_has_cart(self):
+        assert CartModel.objects.filter(user=self.user).exists()
+
+    def test_user_has_userprofile(self):
+        assert UserProfile.objects.filter(user=self.user).exists()
+
+    def test_add_to_cart(self):
+        self.cart.products.add(self.product)
+        self.assertEqual(self.cart.products.all()[0], self.product)
+
+    def test_remove_from_cart(self):
+        self.cart.products.add(self.product)
+        self.cart.products.remove(self.product)
+        self.assertQuerysetEqual(self.cart.products.all(), Products.objects.none())
+
+    def test_order(self):
+        pass
+
+    def test_user_profile_orders(self):
+        pass
+
+#coverage не ребилдится докер 
