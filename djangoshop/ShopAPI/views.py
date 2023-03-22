@@ -1,5 +1,5 @@
 from django.db.models import *
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.generics import *
@@ -56,7 +56,7 @@ class OrderViewSet(viewsets.GenericViewSet,
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
         #  redirect to created order
-        return HttpResponseRedirect(reverse('orders-detail', request=request,
+        return redirect(reverse('orders-detail', request=request,
                                             args=[response.data['id']]))
 
     @action(detail=False, methods=['get'])
