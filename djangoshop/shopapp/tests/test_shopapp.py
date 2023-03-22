@@ -96,12 +96,12 @@ class ShopAppTestCase(TestCase):
 
     def test_admin_user(self):
         self.assertEqual(self.admin_user.username, 'admin')
-        self.assertEqual(self.admin_user.is_staff, True)
+        self.assertTrue(self.admin_user.is_staff)
         self.assertEqual(self.admin_user.email, 'troshiy2011@mail.ru')
 
     def test_user(self):
         self.assertEqual(self.user.username, 'Alexander')
-        self.assertEqual(self.user.is_staff, False)
+        self.assertFalse(self.user.is_staff)
         self.assertEqual(self.user.email, 'troshiy2013@yandex.ru')
         self.assertEqual(self.user.userprofile.user.username, self.user.username)
 
@@ -125,12 +125,16 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.order.products.first(), self.product)
         self.assertEqual(self.order.total_price, self.product.price)
         self.assertEqual(self.order.order_id, 1)
+        product_price_sum = sum(i.price for i in self.order.products.all())
+        self.assertEqual(self.order.total_price, product_price_sum)
 
         self.assertEqual(self.order2.user.username, 'Alexander')
         self.assertEqual(self.order2.products.all()[0], self.product)
         self.assertEqual(self.order2.products.all()[1], self.product2)
         self.assertEqual(self.order2.total_price, self.product.price + self.product2.price)
         self.assertEqual(self.order2.order_id, 2)
+        product2_price_sum = sum(i.price for i in self.order2.products.all())
+        self.assertEqual(self.order2.total_price, product2_price_sum)
 
     def test_create_order_model_function(self):
         self.cart.products.set((self.product,self.product2))
@@ -139,7 +143,7 @@ class ShopAppTestCase(TestCase):
         request = self.factory.post('cart/order/')
         request.user = self.user
         response = OrderView.as_view()(request)
-        self.assertEqual(self.cart.products.exists(), False)
+        self.assertFalse(self.cart.products.exists())
         self.assertEqual(response.status_code, 302)
         self.assertEqual(self.cart.products.count(), 0)
         self.assertEqual(self.user.userprofile.orders.count(), 3)
@@ -148,7 +152,7 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.user.userprofile.orders.count(), 2)
 
     def test_views(self):
-        request = self.factory.get('cart/')
+        request = self.factory.get('/cart/')
         request.user = self.user
         response = CartView.as_view()(request)
         self.assertEqual(response.status_code, 200)

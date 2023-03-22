@@ -35,7 +35,7 @@ class OrderViewSet(viewsets.GenericViewSet,
                    mixins.CreateModelMixin):
     '''Order viewset'''
     queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
-    #  .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
+    # .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
 
@@ -55,11 +55,11 @@ class OrderViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        #  redirect to created order
+        # redirect to created order
         return redirect(reverse('orders-detail', request=request,
                                             args=[response.data['id']]))
 
     @action(detail=False, methods=['get'])
     def recent_orders(self, request):
-        return Response({'resent orders':OrderSerializer(self.queryset[:10],
+        return Response({'resent orders': self.serializer_class(self.queryset.order_by('-date')[:10],
                                                          many=True).data})
