@@ -2,14 +2,14 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
                             Products, UserProfile)
-from shopapp.permissions import IsOwnerOrReadOnly
-from shopapp.serializers import (CartSerializer, OrderSerializer,
-                                 ProductsSerializer)
 
 
-# python manage.py test
+
 # docker compose exec djangoshop-app python manage.py test
-# docker compose exec djangoshop-app python manage.py test shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
+# docker compose exec djangoshop-app python manage.py test 
+# shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
+# python -m coverage run manage.py test
+# python -m coverage report
 class ShopAppTestCase(TestCase):
     def setUp(self) -> None:
         # products
