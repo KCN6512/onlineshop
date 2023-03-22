@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from ..shopapp.models import *
+from shopapp.models import *
 
 
 class CategoriesSerializer(serializers.ModelSerializer):
