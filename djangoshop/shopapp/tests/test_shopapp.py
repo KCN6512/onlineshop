@@ -1,8 +1,8 @@
-from django.contrib.auth.models import User
-from django.test import TestCase
+from django.contrib.auth.models import User, AnonymousUser
+from django.test import RequestFactory, TestCase
 from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
                             Products, UserProfile)
-
+from shopapp.views import *
 
 
 # docker compose exec djangoshop-app python manage.py test
@@ -12,6 +12,9 @@ from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
 # python -m coverage report
 class ShopAppTestCase(TestCase):
     def setUp(self) -> None:
+        # request Factory 
+        self.factory = RequestFactory()
+
         # products
         self.product = Products(name='Тестовый продукт', product_code=8372156,
         description='''Описание товара на русском языке
@@ -21,6 +24,13 @@ class ShopAppTestCase(TestCase):
         self.product.categories.set(categories)
         self.product.save()
 
+        # product 2
+        self.product2 = Products(name='Тестовый продукт 2', product_code=12345,
+        description='ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы', price=2222333)
+        self.product2.save()
+        self.product2.categories.add(categories[1])
+        self.product2.save()
+        
         # categories
         self.categories = categories
 
@@ -40,7 +50,18 @@ class ShopAppTestCase(TestCase):
         self.cart = CartModel.objects.get(user=self.user)
 
         # order
-        
+        self.order = OrderModel.objects.create(user=self.user, total_price=0)
+        self.order.save()
+        self.order.products.add(self.product)
+        self.order.total_price = self.order.price_summary()
+        self.order.save()
+
+        # order 2
+        self.order2 = OrderModel.objects.create(user=self.user, total_price=0)
+        self.order2.save()
+        self.order2.products.set((self.product, self.product2))
+        self.order2.total_price = self.order2.price_summary()
+        self.order2.save()
 
         return super().setUp()
 
@@ -52,9 +73,17 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.product.product_code, 8372156)
         self.assertEqual(self.product.description, '''Описание товара на русском языке
         and in english language и много буквввввввввввввввввввввввввв''')
-        self.assertEqual(self.product.product_code, 8372156)
         self.assertEqual(self.product.price, 12345678)
         self.assertEqual(self.product.image, None)
+
+        self.assertEqual(self.product2.get_absolute_url(), f'/product/{self.product2.product_code}/')
+        self.assertEqual(self.product2.name, 'Тестовый продукт 2')
+        self.assertEqual(list(self.product2.categories.all())[0], list(self.categories)[1])
+        self.assertEqual(self.product2.product_code, 12345)
+        self.assertEqual(self.product2.description, 'ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы')
+        self.assertEqual(self.product2.price, 2222333)
+        self.assertEqual(self.product2.image, None)
+
 
     def test_categories_model(self):
         self.assertEqual(Categories.objects.first().name, 'Смартфон')
@@ -92,9 +121,39 @@ class ShopAppTestCase(TestCase):
         self.assertQuerysetEqual(self.cart.products.all(), Products.objects.none())
 
     def test_order(self):
-        pass
+        self.assertEqual(self.order.user.username, 'Alexander')
+        self.assertEqual(self.order.products.first(), self.product)
+        self.assertEqual(self.order.total_price, self.product.price)
+        self.assertEqual(self.order.order_id, 1)
+
+        self.assertEqual(self.order2.user.username, 'Alexander')
+        self.assertEqual(self.order2.products.all()[0], self.product)
+        self.assertEqual(self.order2.products.all()[1], self.product2)
+        self.assertEqual(self.order2.total_price, self.product.price + self.product2.price)
+        self.assertEqual(self.order2.order_id, 2)
+
+    def test_create_order_model_function(self):
+        self.cart.products.set((self.product,self.product2))
+        self.assertEqual(self.cart.products.all()[0], self.product)
+        self.assertEqual(self.cart.products.all()[1], self.product2)
+        request = self.factory.post('cart/order/')
+        request.user = self.user
+        response = OrderView.as_view()(request)
+        self.assertEqual(self.cart.products.exists(), False)
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.cart.products.count(), 0)
+        self.assertEqual(self.user.userprofile.orders.count(), 3)
 
     def test_user_profile_orders(self):
-        pass
+        self.assertEqual(self.user.userprofile.orders.count(), 2)
 
-#coverage не ребилдится докер 
+    def test_views(self):
+        request = self.factory.get('cart/')
+        request.user = self.user
+        response = CartView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+        
+        request = self.factory.get('cart/')
+        request.user = AnonymousUser()
+        response = CartView.as_view()(request)
+        self.assertEqual(response.status_code, 302)
