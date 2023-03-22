@@ -73,7 +73,7 @@ class OrderModel(models.Model, PriceSummaryMixin):
         last_order = OrderModel.objects.all().last()
         if not last_order:
             return 1
-        return last_order.id + 1
+        return last_order.order_id + 1
     
     def create_order(request):
         cart = CartModel.objects.prefetch_related('products').get(user=request.user)
@@ -92,14 +92,16 @@ class OrderModel(models.Model, PriceSummaryMixin):
     user = models.ForeignKey(User, verbose_name='покупатель',
                              on_delete=models.CASCADE, blank=False,
                              null=True)
-    order_id = models.PositiveIntegerField('Номер заказа', unique=True, default=get_order_id)
+    order_id = models.PositiveIntegerField('Номер заказа', unique=True,
+                                           default=get_order_id)
     products = models.ManyToManyField(Products, verbose_name='Товары в заказе')
     date = models.DateTimeField('Дата заказа', auto_now=True)
-    total_price = models.DecimalField('Итоговая цена заказа', max_digits=15, decimal_places=2,
+    total_price = models.DecimalField('Итоговая цена заказа', max_digits=15,
+                                      decimal_places=2,
                                       null=False)
 
     def __str__(self):
-        return f'{self.user} {self.order_id } {self.date}'
+        return f'{self.user} {self.order_id } {self.date} {self.total_price}'
 
     class Meta:
         verbose_name = 'Заказ'
