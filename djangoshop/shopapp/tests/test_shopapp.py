@@ -5,7 +5,6 @@ from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
 from shopapp.views import *
 
 
-# docker compose exec djangoshop-app python manage.py test
 # docker compose exec djangoshop-app python manage.py test 
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
@@ -22,14 +21,12 @@ class ShopAppTestCase(TestCase):
         self.product.save()
         categories = [Categories.objects.create(name='Смартфон'), Categories.objects.create(name='Телевизор')]
         self.product.categories.set(categories)
-        self.product.save()
 
         # product 2
         self.product2 = Products(name='Тестовый продукт 2', product_code=12345,
         description='ыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыыы', price=2222333)
         self.product2.save()
         self.product2.categories.add(categories[1])
-        self.product2.save()
         
         # categories
         self.categories = categories
@@ -54,14 +51,12 @@ class ShopAppTestCase(TestCase):
         self.order.save()
         self.order.products.add(self.product)
         self.order.total_price = self.order.price_summary()
-        self.order.save()
 
         # order 2
         self.order2 = OrderModel.objects.create(user=self.user, total_price=0)
         self.order2.save()
         self.order2.products.set((self.product, self.product2))
         self.order2.total_price = self.order2.price_summary()
-        self.order2.save()
 
         return super().setUp()
 
