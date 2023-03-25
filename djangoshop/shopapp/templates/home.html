@@ -3,7 +3,7 @@
     {% for product in products %}
     <div class="card w-50 ml-2 mb-2">
       {% if product.image %}
-        <img class="card-img-top w-25 ml-3 mt-3" src="{{ product.image.url }}" alt="{{ product.name }}">
+        <img loading="lazy" class="card-img-top w-25 ml-3 mt-3" src="{{ product.image.url }}" alt="{{ product.name }}">
       {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>

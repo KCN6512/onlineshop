@@ -11,7 +11,9 @@
 
     {% block content %}
     <div class="card w-75 ml-2 mb-2" style="width: 18rem;">
-        <img class="card-img-top w-25" src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% if product.image %}
+      <img class="card-img-top w-25" src="{{ product.image.url }}" alt="{{ product.name }}">
+      {% endif %}
         <div class="card-body">
           <h5 class="card-title">{{ product.name }}</h5>
           <h6 class="card-title">Категории товара : {{ product.categories.all|join:',' }}</h6>
