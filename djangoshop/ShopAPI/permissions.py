@@ -1,3 +1,4 @@
+from rest_framework.permissions import IsAdminUser, SAFE_METHODS
 from rest_framework import permissions
 
 
@@ -15,3 +16,12 @@ class IsOwnerOrReadOnly(permissions.BasePermission):
 
         # Instance must have an attribute named `owner`.
         return obj.user == request.user
+
+
+class IsAdminUserOrReadOnly(IsAdminUser):
+
+    def has_permission(self, request, view):
+        is_admin = super(
+            IsAdminUserOrReadOnly, 
+            self).has_permission(request, view)
+        return request.method in SAFE_METHODS or is_admin
