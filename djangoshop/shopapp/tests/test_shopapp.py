@@ -51,12 +51,14 @@ class ShopAppTestCase(TestCase):
         self.order.save()
         self.order.products.add(self.product)
         self.order.total_price = self.order.price_summary()
+        self.order.save()
 
         # order 2
         self.order2 = OrderModel.objects.create(user=self.user, total_price=0)
         self.order2.save()
         self.order2.products.set((self.product, self.product2))
         self.order2.total_price = self.order2.price_summary()
+        self.order2.save()
 
         return super().setUp()
 
@@ -79,6 +81,12 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.product2.price, 2222333)
         self.assertEqual(self.product2.image, None)
 
+    def test_m2m(self):
+        product3 = Products.objects.create(name='ТЕСТ ТЕСТ', product_code=123456,
+        description='''Описание товара на русском языке
+        and in english language и много буквввввввввввввввввввввввввв''', price=232323)
+        product3.save()
+        product3.categories.set(self.categories)
 
     def test_categories_model(self):
         self.assertEqual(Categories.objects.first().name, 'Смартфон')
@@ -122,6 +130,7 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.order.order_id, 1)
         product_price_sum = sum(i.price for i in self.order.products.all())
         self.assertEqual(self.order.total_price, product_price_sum)
+        self.assertEqual(OrderModel.objects.get(order_id=1).total_price, product_price_sum)
 
         self.assertEqual(self.order2.user.username, 'Alexander')
         self.assertEqual(self.order2.products.all()[0], self.product)
@@ -130,6 +139,7 @@ class ShopAppTestCase(TestCase):
         self.assertEqual(self.order2.order_id, 2)
         product2_price_sum = sum(i.price for i in self.order2.products.all())
         self.assertEqual(self.order2.total_price, product2_price_sum)
+        self.assertEqual(OrderModel.objects.get(order_id=2).total_price, product2_price_sum)
 
     def test_create_order_model_function(self):
         self.cart.products.set((self.product,self.product2))

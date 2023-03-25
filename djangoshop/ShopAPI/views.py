@@ -7,7 +7,7 @@ from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.reverse import reverse
 from shopapp.models import CartModel, OrderModel, Products
-from .permissions import IsOwnerOrReadOnly
+from .permissions import IsAdminUserOrReadOnly, IsOwnerOrReadOnly
 from .serializers import (CartSerializer, OrderSerializer,
                                  ProductsSerializer)
 
@@ -16,7 +16,7 @@ class ProductsViewSet(viewsets.ModelViewSet):
     '''Products viewset'''
     queryset = Products.objects.all().prefetch_related('categories')
     serializer_class = ProductsSerializer
-    permission_classes = [DjangoModelPermissions]
+    permission_classes = [IsAdminUserOrReadOnly]
 
 
 class CartViewSet(viewsets.GenericViewSet,
@@ -26,7 +26,7 @@ class CartViewSet(viewsets.GenericViewSet,
     '''Cart viewset'''
     queryset = CartModel.objects.all().prefetch_related('products').select_related('user')
     serializer_class = CartSerializer
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
 
 
 class OrderViewSet(viewsets.GenericViewSet,
@@ -37,7 +37,7 @@ class OrderViewSet(viewsets.GenericViewSet,
     queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
     # .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
