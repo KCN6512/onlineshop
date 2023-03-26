@@ -1,14 +1,11 @@
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.urls import reverse
-from shopapp.models import Products, CartModel, Categories
+from shopapp.models import Products, CartModel, Categories, OrderModel
 from django.contrib.auth.models import User, AnonymousUser
-from ShopAPI.serializers import ProductsSerializer
+from ShopAPI.serializers import ProductsSerializer, OrderSerializer, CartSerializer
 
-    # request = self.factory.get('/api/v1/products/')
-    # response = self.client.get('/api/v1/products/')
-    # self.client.login(username='Alexander', password=123456)
-    # print(self.client.get('/api/v1/products/'))
+
 # docker compose exec djangoshop-app python manage.py test
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
@@ -43,7 +40,7 @@ class ShopAPITestCase(APITestCase):
         self.url_orders = reverse('orders-list')
         # urls details
         self.url_detail_products = reverse('products-detail', args=[Products.objects.first().id])
-        self.url_detail_carts = reverse('carts-detail', args=[Products.objects.first().id])
+        self.url_detail_carts = reverse('carts-detail', args=[CartModel.objects.first().id])
         self.url_detail_orders = reverse('orders-detail', args=[Products.objects.first().id])
 
         return super().setUp()
@@ -52,6 +49,7 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(self.user.is_staff, False)
         self.assertEqual(self.admin_user.is_staff, True)
         self.assertEqual(self.anon_user.is_staff, False)
+
     # get products
     def test_get_products_user(self):
         self.client.force_login(user=self.user)
@@ -113,7 +111,7 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.wsgi_request.user, self.user)
         # serializer data
-        serializer = ProductsSerializer(Products.objects.get(id=1))
+        serializer = ProductsSerializer(Products.objects.get(id=self.product.id))
         self.assertEqual(response.data, serializer.data)
 
     def test_get_product_admin_user(self):
@@ -122,14 +120,41 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.wsgi_request.user, self.admin_user)
         # serializer data
-        serializer = ProductsSerializer(Products.objects.get(id=1))
+        serializer = ProductsSerializer(Products.objects.get(id=self.product.id))
         self.assertEqual(response.data, serializer.data)
-
 
     def test_get_product_anon_user(self):
         response = self.client.get(self.url_detail_products)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.wsgi_request.user, self.anon_user)
         # serializer data
-        serializer = ProductsSerializer(Products.objects.get(id=1))
+        serializer = ProductsSerializer(Products.objects.get(id=self.product.id))
         self.assertEqual(response.data, serializer.data)
+
+    # get single cart
+    def test_get_cart_user(self):
+        self.client.force_login(user=self.user)
+        response = self.client.get(reverse('carts-detail', args=[self.user.userprofile.cart.id]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.wsgi_request.user, self.user)
+        # serializer data
+        serializer = CartSerializer(CartModel.objects.get(id=self.user.userprofile.cart.id))
+        self.assertEqual(response.data, serializer.data)
+
+    def test_get_cart_admin_user(self):
+        self.client.force_login(user=self.admin_user)
+        response = self.client.get(reverse('carts-detail', args=[self.admin_user.userprofile.cart.id]))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.wsgi_request.user, self.admin_user)
+        # serializer data
+        serializer = CartSerializer(CartModel.objects.get(id=self.admin_user.userprofile.cart.id))
+        self.assertEqual(response.data, serializer.data)
+
+
+    def test_get_cart_anon_user(self):
+        self.assertRaises(AttributeError, lambda: self.client.get(reverse('carts-detail', args=[self.anon_user.userprofile.cart.id])))
+        self.assertRaises(AttributeError, lambda: CartSerializer(CartModel.objects.get(id=self.anon_user.userprofile.cart.id)))
+
+
+# TODO test login register serializers and POSTs
+# teso
