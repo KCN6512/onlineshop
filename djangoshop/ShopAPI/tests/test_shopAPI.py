@@ -1,9 +1,14 @@
+import json
+from django.conf import settings
+from django.test import RequestFactory
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from shopapp.models import Products, CartModel, Categories, OrderModel
 from django.contrib.auth.models import User, AnonymousUser
 from ShopAPI.serializers import ProductsSerializer, OrderSerializer, CartSerializer
+from ShopAPI.views import OrderViewSet
+from rest_framework.authtoken.models import Token
 
 
 # docker compose exec djangoshop-app python manage.py test
@@ -14,6 +19,7 @@ from ShopAPI.serializers import ProductsSerializer, OrderSerializer, CartSeriali
 
 class ShopAPITestCase(APITestCase):
     def setUp(self) -> None:
+        self.factory = RequestFactory()
 
         # products
         self.product = Products(name='Тестовый продукт', product_code=8372156,
@@ -40,9 +46,22 @@ class ShopAPITestCase(APITestCase):
         self.url_orders = reverse('orders-list')
         # urls details
         self.url_detail_products = reverse('products-detail', args=[Products.objects.first().id])
-        self.url_detail_carts = reverse('carts-detail', args=[CartModel.objects.first().id])
-        self.url_detail_orders = reverse('orders-detail', args=[Products.objects.first().id])
 
+        # order
+        self.order = OrderModel.objects.create(user=self.user, total_price=0)
+        self.order.save()
+        self.order.products.add(self.product)
+        self.order.total_price = self.order.price_summary()
+        self.order.save()
+
+        # order 2
+        self.order2 = OrderModel.objects.create(user=self.user, total_price=0)
+        self.order2.save()
+        self.order2.products.set((self.product, self.product2))
+        self.order2.total_price = self.order2.price_summary()
+        self.order2.save()
+        # products json
+        self.products = {"products": [1]}
         return super().setUp()
     
     def test_is_user_staff(self):
@@ -103,7 +122,14 @@ class ShopAPITestCase(APITestCase):
         response = self.client.get(self.url_orders)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.wsgi_request.user, self.anon_user)
-    
+
+    def test_get_recent_orders(self):
+        view = OrderViewSet.as_view(actions={'get': 'recent_orders'})
+        request = self.factory.get(f'/api/v1/orders/recent_orders/')
+        response = view(request)
+        serializer = OrderSerializer(OrderModel.objects.all().order_by('-date')[:10], many=True)
+        self.assertEqual(response.data['recent orders'], serializer.data) 
+
     # get single product 
     def test_get_product_user(self):
         self.client.force_login(user=self.user)
@@ -155,6 +181,34 @@ class ShopAPITestCase(APITestCase):
         self.assertRaises(AttributeError, lambda: self.client.get(reverse('carts-detail', args=[self.anon_user.userprofile.cart.id])))
         self.assertRaises(AttributeError, lambda: CartSerializer(CartModel.objects.get(id=self.anon_user.userprofile.cart.id)))
 
+    def test_post_product(self):
+        # user
+        self.client.force_login(user=self.user)
+        response = self.client.post('/api/v1/products/')
+        response2 = self.client.post(reverse('products-list'))
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response2.status_code, status.HTTP_403_FORBIDDEN)
+        # admin_user   
+        self.client.force_login(user=self.admin_user)
+        response = self.client.post(reverse('products-list'))
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-# TODO test login register serializers and POSTs
-# teso
+# need token
+    # def test_post_orders(self):
+    #     # user
+    #     self.client.force_login(user=self.user)
+    #     response = self.client.post(reverse('orders-list'))
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+    #     # admin_user   
+    #     self.client.force_login(user=self.admin_user)
+    #     response = self.client.post(reverse('orders-list'))
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    #     # user
+    #     self.client.force_login(user=self.user)
+    #     request = self.factory.post(reverse('orders-list'), data=json.dumps(self.products), content_type='application/json', )
+    #     view = OrderViewSet.as_view(actions={'post': 'create'})
+    #     response = view(request)
+    #     print(response.data)
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
