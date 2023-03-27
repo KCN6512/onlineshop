@@ -1,15 +1,16 @@
 import json
-from django.conf import settings
-from django.test import RequestFactory
-from rest_framework import status
-from rest_framework.test import APITestCase
-from django.urls import reverse
-from shopapp.models import Products, CartModel, Categories, OrderModel
-from django.contrib.auth.models import User, AnonymousUser
-from ShopAPI.serializers import ProductsSerializer, OrderSerializer, CartSerializer
-from ShopAPI.views import OrderViewSet
-from rest_framework.authtoken.models import Token
 
+from django.conf import settings
+from django.contrib.auth.models import AnonymousUser, User
+from django.test import RequestFactory
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.authtoken.models import Token
+from rest_framework.test import APITestCase
+from ShopAPI.serializers import (CartSerializer, OrderSerializer,
+                                 ProductsSerializer)
+from ShopAPI.views import OrderViewSet
+from shopapp.models import CartModel, Categories, OrderModel, Products
 
 # docker compose exec djangoshop-app python manage.py test
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
