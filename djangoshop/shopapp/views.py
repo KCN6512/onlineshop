@@ -39,7 +39,7 @@ class UserRegistrationView(CreateView):
     ''' User registration view '''
     form_class = UserRegistrationForm
     template_name = 'register.html'
-    success_url = reverse_lazy('login_view')  # reverse_lazy нужен для классов вьюшек
+    success_url = reverse_lazy('login_view')  #  reverse_lazy нужен для классов вьюшек
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

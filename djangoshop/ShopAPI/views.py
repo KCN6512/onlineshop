@@ -62,4 +62,4 @@ class OrderViewSet(viewsets.GenericViewSet,
     @action(detail=False, methods=['get'])
     def recent_orders(self, request):
         return Response({'recent orders': self.serializer_class(self.queryset.order_by('-date')[:10],
-                                                         many=True).data})
+                                                                many=True).data})
