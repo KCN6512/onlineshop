@@ -7,7 +7,6 @@ from rest_framework.mixins import *
 from rest_framework.permissions import *
 from rest_framework.reverse import reverse
 from shopapp.models import CartModel, OrderModel, Products
-
 from .permissions import IsAdminUserOrReadOnly, IsOwnerOrReadOnly
 from .serializers import CartSerializer, OrderSerializer, ProductsSerializer
 

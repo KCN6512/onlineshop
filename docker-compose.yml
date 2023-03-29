@@ -12,6 +12,12 @@ services:
       - DB_USER=dbuser
       - DB_PASS=pass
       - SECRET_KEY=6&hlkjk&gvso4j)&a0()u_pi^*)m2x!a44ko$og(3a&cp05d+-
+      - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+      - EMAIL_HOST=smtp.gmail.com
+      - EMAIL_PORT=465
+      - EMAIL_USE_SSL=True
+      - EMAIL_HOST_USER=flekso.channel@gmail.com
+      - EMAIL_HOST_PASSWORD=ppqlgcwrkzqeedmf
 
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
