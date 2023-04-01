@@ -17,7 +17,7 @@ def debug_task():
     time.sleep(20)
     print('ended task')
 
-@app.task()
+@app.task()# might move it to signals
 def send_order_mail():
     send_mail('Subject here',
     'Here is the message.',

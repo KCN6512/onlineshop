@@ -137,7 +137,8 @@ class OrderView(LoginRequiredMixin, View):
             OrderModel.create_order(request)
         except:
             return HttpResponse('''<h1>Произошла ошибка, попробуйте позже
-            или свяжитесь с нами через форму обратной связи</h1>''')
+                                или свяжитесь с нами через форму обратной
+                                связи</h1>''')
         return redirect('thanks')
 
 
