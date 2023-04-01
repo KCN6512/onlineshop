@@ -138,3 +138,4 @@ djangoshop/media
 djangoshop/123.flake8 
 123.flake8
 .flake8
+docker-compose.yml
