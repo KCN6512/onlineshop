@@ -15,7 +15,7 @@ app.autodiscover_tasks()
 @app.task()
 def debug_task():
     time.sleep(10)
-    print('ended task')
+    print('ended debug task')
 
 @app.task()# launch delayed task in signals
 def send_order_mail():
