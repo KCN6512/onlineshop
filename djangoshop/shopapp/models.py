@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, RegexValidator
-from django.db import models
+from django.db import models, transaction
 from django.http import HttpResponse
 from django.urls import reverse
 
@@ -74,7 +74,8 @@ class OrderModel(models.Model, PriceSummaryMixin):
         if not last_order:
             return 1
         return last_order.order_id + 1
-    
+# transaction.atomic() блокирует изменение записи в бд пока активны другие транзакции и ждет их освобождения
+# так же нужен select_for_update() блокирующий изменения
     def create_order(request):
         cart = CartModel.objects.prefetch_related('products').get(user=request.user)
         products = cart.products.all()
