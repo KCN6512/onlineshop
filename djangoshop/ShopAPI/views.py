@@ -36,7 +36,7 @@ class OrderViewSet(viewsets.GenericViewSet,
     queryset = OrderModel.objects.all().prefetch_related('products').select_related('user')
     # .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
