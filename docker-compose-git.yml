@@ -16,8 +16,8 @@ services:
       - EMAIL_HOST=smtp.gmail.com
       - EMAIL_PORT=465
       - EMAIL_USE_SSL=True
-      - EMAIL_HOST_USER=flekso.channel@gmail.com
-      - EMAIL_HOST_PASSWORD=ppqlgcwrkzqeedmf
+      - EMAIL_HOST_USER=email
+      - EMAIL_HOST_PASSWORD=password
 
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
@@ -61,8 +61,8 @@ services:
       - EMAIL_HOST=smtp.gmail.com
       - EMAIL_PORT=465
       - EMAIL_USE_SSL=True
-      - EMAIL_HOST_USER=flekso.channel@gmail.com
-      - EMAIL_HOST_PASSWORD=ppqlgcwrkzqeedmf
+      - EMAIL_HOST_USER=email
+      - EMAIL_HOST_PASSWORD=password
 
   flower:
     build:
