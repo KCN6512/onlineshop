@@ -74,8 +74,7 @@ class OrderModel(models.Model, PriceSummaryMixin):
         if not last_order:
             return 1
         return last_order.order_id + 1
-# transaction.atomic() блокирует изменение записи в бд пока активны другие транзакции и ждет их освобождения
-# так же нужен select_for_update() блокирующий изменения
+
     def create_order(request):
         cart = CartModel.objects.prefetch_related('products').get(user=request.user)
         products = cart.products.all()
@@ -124,3 +123,5 @@ class UserProfile(models.Model):
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили'
+# transaction.atomic() блокирует изменение записи в бд пока активны другие транзакции и ждет их освобождения
+# так же нужен select_for_update() блокирующий изменения
