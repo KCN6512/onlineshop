@@ -16,6 +16,7 @@ from shopapp.models import CartModel, Categories, OrderModel, Products
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
 # python -m coverage report
+# print('reverse-list', reverse('orders-list'), 'reverse-detail', reverse('orders-detail', args=[213]))
 
 
 class ShopAPITestCase(APITestCase):
