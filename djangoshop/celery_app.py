@@ -1,9 +1,11 @@
 import os
 import time
-from shopapp.tasks import test_task
+
 from celery import Celery
 from celery.schedules import crontab
 from django.conf import settings
+from shopapp.tasks import test_task
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djangoshop.settings')
 
 app = Celery('djangoshop')
