@@ -8,3 +8,7 @@ def send_order_mail():
     'djangoshop@app.com',
     ['user@email'],
     fail_silently=False,)
+
+@shared_task
+def test_task():
+    print('1 minute has passed')
