@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, RegexValidator
-from django.db import models, transaction
+from django.db import models
 from django.http import HttpResponse
 from django.urls import reverse
 
