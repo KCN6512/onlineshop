@@ -18,9 +18,11 @@ def debug_task():
     time.sleep(10)
     print('ended debug task')
 
+# need to restart workers and sheduler if task has changed
 app.conf.beat_schedule = {
     'add-every-minute': {
         'task': 'shopapp.tasks.test_task',
         'schedule': crontab(minute='*/1'),
+        'args': ('first word', 'second word'),
     },
 }
