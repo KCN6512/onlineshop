@@ -14,4 +14,4 @@ RUN adduser --disabled-password djangoshop-user
 
 USER djangoshop-user
 
-#docker-compose run --rm djangoshop-app sh -c "python manage.py migrate"  
+#docker-compose exec djangoshop-app "python manage.py migrate"  
