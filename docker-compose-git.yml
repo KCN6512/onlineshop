@@ -78,3 +78,16 @@ services:
       - redis
     ports:
       - "5555:5555"
+
+  sheduler:
+    build:
+      context: .
+    hostname: sheduler
+    entrypoint: celery
+    command: -A djangoshop.celery_app beat --loglevel=info
+    volumes:
+      - ./djangoshop:/djangoshop
+    links: 
+      - redis
+    depends_on:
+      - redis
