@@ -13,4 +13,4 @@ def send_order_mail():
 @shared_task
 def test_task(word, word2):
     print('1 minute has passed')
-    print(word, word2)
+    print(f'{word} {word2}')
