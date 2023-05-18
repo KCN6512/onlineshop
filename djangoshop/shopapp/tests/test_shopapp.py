@@ -9,6 +9,8 @@ from shopapp.views import *
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
 # python -m coverage report
+# flake8 --append-config djangoshop/123.flake8 djangoshop
+
 class ShopAppTestCase(TestCase):
     def setUp(self) -> None:
         # request Factory 

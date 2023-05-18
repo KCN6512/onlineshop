@@ -1,11 +1,8 @@
-import json
-
 from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User
 from django.test import RequestFactory
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase
 from ShopAPI.serializers import (CartSerializer, OrderSerializer,
                                  ProductsSerializer)
@@ -17,6 +14,7 @@ from shopapp.models import CartModel, Categories, OrderModel, Products
 # python -m coverage run manage.py test
 # python -m coverage report
 # print('reverse-list', reverse('orders-list'), 'reverse-detail', reverse('orders-detail', args=[213]))
+# flake8 --append-config djangoshop/123.flake8 djangoshop
 
 
 class ShopAPITestCase(APITestCase):
