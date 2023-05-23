@@ -70,7 +70,7 @@ class CartModel(models.Model, PriceSummaryMixin):
 
 class OrderModel(models.Model, PriceSummaryMixin):
     def get_order_id():
-        last_order = OrderModel.objects.all().last()
+        last_order = OrderModel.objects.last()
         if not last_order:
             return 1
         return last_order.order_id + 1
