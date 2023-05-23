@@ -1,14 +1,18 @@
 {% extends 'base.html' %}
 
+{% load static %}
 
 {% block content %}
+<video autoplay controls width="25%" height="25%"><source src="{% static 'жопа окисляется.mp4' %}" type="video/mp4"></video>
     {% for order in orders %}
     <div class="card w-50 ml-2 mb-2">
         <div class="card-body">
             <h4>Номер заказа: {{ order.order_id }}</h4>
             <h4>Дата заказа: {{ order.date }}</h4>
           <h6 class="card-title">Товары: {{ order.products.all|join:',' }}</h5>
-          <h5 class="card-title">Итого : {{ order.total_price|floatformat }} рублей </h5> 
+          <h5 class="card-title">Итого : {{ order.total_price|floatformat }} рублей </h5>
+          
+          <img src="{% static '123.png' %}" alt="My image" width="25%" height="25%">
         </div>
       </div>
     {% endfor %}
