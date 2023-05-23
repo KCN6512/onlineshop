@@ -8,7 +8,7 @@ def send_order_mail():
     'Here is the message.',
     'djangoshop@app.com',
     ['user@email'],
-    fail_silently=False,)
+    fail_silently=False)
 
 @shared_task
 def test_task(word, word2):
