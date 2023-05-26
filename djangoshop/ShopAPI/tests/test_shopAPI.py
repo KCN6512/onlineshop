@@ -9,7 +9,7 @@ from ShopAPI.serializers import (CartSerializer, OrderSerializer,
 from ShopAPI.views import OrderViewSet
 from shopapp.models import CartModel, Categories, OrderModel, Products
 
-# docker compose exec djangoshop-app python manage.py test
+# docker compose exec djangoshop-app python manage.py test --parallel
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
 # python -m coverage report
