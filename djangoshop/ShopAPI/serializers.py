@@ -29,6 +29,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class OrderSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
+    # context_test = serializers.SerializerMethodField()
+
+    # def get_context_test(self, context):
+    #     print(self.context)
+    #     return self.context
 
     class Meta:
         model = OrderModel
