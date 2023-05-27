@@ -38,6 +38,7 @@ class OrderViewSet(viewsets.GenericViewSet,
     # .prefetch_related(Prefetch('products', queryset=Products.objects.all().only('id')))
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    lookup_field = 'order_id'
     # def get_serializer_context(self):
     #     return {'123': 456}
     # def retrieve(self, request, *args, **kwargs):
