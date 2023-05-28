@@ -40,3 +40,11 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {'total_price': {'required': False, 'read_only': True},
                         'order_id': {'required': False, 'read_only': True},}
+
+class OrderListSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+    products = ProductsSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = OrderModel
+        fields = '__all__'

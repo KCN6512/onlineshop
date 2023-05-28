@@ -9,7 +9,7 @@ from rest_framework.reverse import reverse
 from shopapp.models import CartModel, OrderModel, Products
 
 from .permissions import IsAdminUserOrReadOnly, IsOwnerOrReadOnly
-from .serializers import CartSerializer, OrderSerializer, ProductsSerializer
+from .serializers import CartSerializer, OrderListSerializer, OrderSerializer, ProductsSerializer
 
 
 class ProductsViewSet(viewsets.ModelViewSet):
@@ -47,6 +47,16 @@ class OrderViewSet(viewsets.GenericViewSet,
     #     response = {i:j for i,j in serializer.data.items()} | {i:j for i,j in serializer.context.items()}
     #     return Response(response)
 
+    def get_serializer_class(self):
+        if self.action == 'list':
+            return OrderListSerializer
+        return super().get_serializer_class()
+    
+    def get_queryset(self):
+        if self.action == 'list':
+            return OrderModel.objects.all().prefetch_related(Prefetch('products', queryset=Products.objects.prefetch_related('categories'))).select_related('user')
+        return super().get_queryset()
+
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
         response = super().list(request, *args, **kwargs)
@@ -63,9 +73,11 @@ class OrderViewSet(viewsets.GenericViewSet,
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
+        print(response.data)
+        print(reverse('orders-detail', request=request, args=[response.data['id']]))
         # redirect to created order
         return redirect(reverse('orders-detail', request=request,
-                                            args=[response.data['id']]))
+                                            args=[response.data['order_id']]))
 
     @action(detail=False, methods=['get'])
     def recent_orders(self, request):
