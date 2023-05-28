@@ -62,6 +62,8 @@ class ShopAPITestCase(APITestCase):
         self.order2.save()
         # products json
         self.products = {"products": [1]}
+
+        #reverse('orders-recent-orders') reverse url for recent_orders action
         return super().setUp()
     
     def test_is_user_staff(self):
