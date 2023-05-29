@@ -168,3 +168,7 @@ class ShopAppTestCase(TestCase):
         request.user = AnonymousUser()
         response = CartView.as_view()(request)
         self.assertEqual(response.status_code, 302)
+
+    # users = User.objects.values('is_staff').annotate(count=Count('id')) # Group by количество всех is_staff и не стафф юзеров
+    # print(users)
+    # print(users.query)
