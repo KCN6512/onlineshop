@@ -9,7 +9,8 @@ from rest_framework.reverse import reverse
 from shopapp.models import CartModel, OrderModel, Products
 
 from .permissions import IsAdminUserOrReadOnly, IsOwnerOrReadOnly
-from .serializers import CartSerializer, OrderListSerializer, OrderSerializer, ProductsSerializer
+from .serializers import (CartSerializer, OrderListSerializer, OrderSerializer,
+                          ProductsSerializer)
 
 
 class ProductsViewSet(viewsets.ModelViewSet):

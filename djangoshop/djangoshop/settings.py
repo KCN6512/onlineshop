@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     'debug_toolbar',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -196,3 +197,8 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT')
 EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL')
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+# Graphene 
+GRAPHENE = {
+    "SCHEMA": "ShopAPI.schema.schema"
+}

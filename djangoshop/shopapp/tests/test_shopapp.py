@@ -4,7 +4,6 @@ from shopapp.models import (CartModel, Categories, FeedbackModel, OrderModel,
                             Products, UserProfile)
 from shopapp.views import *
 
-
 # docker compose exec djangoshop-app python manage.py test --parallel
 # shopapp.tests.test_shopapp.ShopAppTestCase.test_user_has_userprofile протестировать только метод
 # python -m coverage run manage.py test
