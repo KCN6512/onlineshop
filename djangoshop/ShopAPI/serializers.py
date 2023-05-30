@@ -46,7 +46,7 @@ class OrderListSerializer(serializers.ModelSerializer):
     products = ProductsSerializer(many=True, read_only=True)
     #test_field = serializers.SerializerMethodField()
 
-    # def get_test_field(self, obj): # Access to request by using context
+    # def get_test_field(self, obj): # Access to request by using context 
     #     # obj is each order
     #     return self.context['request'].user.username
 
