@@ -109,3 +109,35 @@ schema = graphene.Schema(query=Query)
 #           }
 #         ]
 #       },
+
+# {
+#   allOrders {
+#     orderId
+    
+#     user{
+#       isSuperuser
+#     }
+#   }
+# }
+
+# {
+#   "data": {
+#     "allOrders": [
+#       {
+#         "orderId": 126,
+#         "user": {
+#           "isSuperuser": true
+#         }
+#       },
+#       {
+#         "orderId": 127,
+#         "user": {
+#           "isSuperuser": true
+#         }
+#       },
+#       {
+#         "orderId": 128,
+#         "user": {
+#           "isSuperuser": true
+#         }
+#       },
