@@ -195,21 +195,9 @@ class ShopAPITestCase(APITestCase):
         response = self.client.post(reverse('products-list'))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-# need token
-    # def test_post_orders(self):
-    #     # user
-    #     self.client.force_login(user=self.user)
-    #     response = self.client.post(reverse('orders-list'))
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-    #     # admin_user   
-    #     self.client.force_login(user=self.admin_user)
-    #     response = self.client.post(reverse('orders-list'))
-    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-    #     # user
-    #     self.client.force_login(user=self.user)
-    #     request = self.factory.post(reverse('orders-list'), data=json.dumps(self.products), content_type='application/json', )
-    #     view = OrderViewSet.as_view(actions={'post': 'create'})
-    #     response = view(request)
-    #     print(response.data)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+# import random
+# import redis
+# r = redis.Redis(host='redis', port=6379, decode_responses=True)
+#         r.set(random.randrange(100000), random.randrange(100000))
+#         print(r.dbsize())
