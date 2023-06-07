@@ -131,6 +131,7 @@ class OrderView(LoginRequiredMixin, View):
             return HttpResponse('<h1>Корзина пуста, заказ невозможен</h1>')
         return render(request, 'order.html', context=context)
 
+    @transaction.atomic
     def post(self, request, *args, **kwargs):
         try:
             OrderModel.create_order(request)
